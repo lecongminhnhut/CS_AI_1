@@ -1,0 +1,1539 @@
+{
+  "name": "Bloxorz - Bộ màn chơi theo nhóm độ khó tăng dần",
+  "description": "43 màn: bốn nhóm có lời giải tăng dần độ khó và một nhóm gồm ba màn vô nghiệm.",
+  "groups": [
+    {
+      "id": "basic",
+      "name": "01 · Cơ bản",
+      "description": "Chỉ sàn thường và ô trống; lời giải ngắn nhất 4–8 thao tác.",
+      "cases": [
+        {
+          "id": "B01",
+          "name": "Cơ bản 01",
+          "board": {
+            "rows": [
+              "...G...",
+              "... ...",
+              ". .. ..",
+              " ...  S",
+              "... ...",
+              " .... ."
+            ]
+          }
+        },
+        {
+          "id": "B02",
+          "name": "Cơ bản 02",
+          "board": {
+            "rows": [
+              "... ..",
+              "..S...",
+              "......",
+              "..G.. ",
+              " .....",
+              "......"
+            ]
+          }
+        },
+        {
+          "id": "B03",
+          "name": "Cơ bản 03",
+          "board": {
+            "rows": [
+              ".......",
+              "...G...",
+              ". .....",
+              "S..... ",
+              "......."
+            ]
+          }
+        },
+        {
+          "id": "B04",
+          "name": "Cơ bản 04",
+          "board": {
+            "rows": [
+              ".....",
+              ". ...",
+              "... .",
+              ".... ",
+              "..SG."
+            ]
+          }
+        },
+        {
+          "id": "B05",
+          "name": "Cơ bản 05",
+          "board": {
+            "rows": [
+              ".. . ..",
+              " S. ...",
+              "....G..",
+              " ......",
+              ".....  "
+            ]
+          }
+        },
+        {
+          "id": "B06",
+          "name": "Cơ bản 06",
+          "board": {
+            "rows": [
+              ".... . ",
+              ".G.....",
+              ".......",
+              "S..... "
+            ]
+          }
+        },
+        {
+          "id": "B07",
+          "name": "Cơ bản 07",
+          "board": {
+            "rows": [
+              "..G .",
+              " ....",
+              ".....",
+              ".....",
+              "....S"
+            ]
+          }
+        },
+        {
+          "id": "B08",
+          "name": "Cơ bản 08",
+          "board": {
+            "rows": [
+              ".... .",
+              ".. ...",
+              "... ..",
+              ".....G",
+              "....S.",
+              "......"
+            ]
+          }
+        },
+        {
+          "id": "B09",
+          "name": "Cơ bản 09",
+          "board": {
+            "rows": [
+              "... ..",
+              "....G.",
+              "......",
+              ".....S"
+            ]
+          }
+        },
+        {
+          "id": "B10",
+          "name": "Cơ bản 10",
+          "board": {
+            "rows": [
+              "...G...",
+              ".... ..",
+              "..S . .",
+              "..  ...",
+              ".... ..",
+              ".. . . "
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "fragile",
+      "name": "02 · Sàn dễ vỡ",
+      "description": "Phải đi qua ô dễ vỡ ở tư thế phù hợp; lời giải ngắn nhất 9–14 thao tác.",
+      "cases": [
+        {
+          "id": "F01",
+          "name": "Sàn dễ vỡ 01",
+          "board": {
+            "rows": [
+              "   .. .",
+              "FF  .. ",
+              " . FSG.",
+              ".......",
+              "  F..  ",
+              "..... ."
+            ]
+          }
+        },
+        {
+          "id": "F02",
+          "name": "Sàn dễ vỡ 02",
+          "board": {
+            "rows": [
+              "..  F. .",
+              "..... . ",
+              "......F.",
+              "..F ....",
+              " .. ....",
+              "...GF.  ",
+              ".S...F.."
+            ]
+          }
+        },
+        {
+          "id": "F03",
+          "name": "Sàn dễ vỡ 03",
+          "board": {
+            "rows": [
+              "..FS..F",
+              "F .  ..",
+              "..G. ..",
+              "..... .",
+              ". F..F."
+            ]
+          }
+        },
+        {
+          "id": "F04",
+          "name": "Sàn dễ vỡ 04",
+          "board": {
+            "rows": [
+              "F......",
+              ".... F.",
+              ".. S. .",
+              "...F..F",
+              "G......",
+              " .. ...",
+              ".F...  "
+            ]
+          }
+        },
+        {
+          "id": "F05",
+          "name": "Sàn dễ vỡ 05",
+          "board": {
+            "rows": [
+              "S...  G",
+              ".. ....",
+              " .... .",
+              "... ...",
+              ".F ....",
+              "..F .F."
+            ]
+          }
+        },
+        {
+          "id": "F06",
+          "name": "Sàn dễ vỡ 06",
+          "board": {
+            "rows": [
+              ".......",
+              ".S ....",
+              " . .. .",
+              "...F. .",
+              "...F..G",
+              "  .. .."
+            ]
+          }
+        },
+        {
+          "id": "F07",
+          "name": "Sàn dễ vỡ 07",
+          "board": {
+            "rows": [
+              "...  .",
+              "....S ",
+              ".... .",
+              ". F. .",
+              "..G..."
+            ]
+          }
+        },
+        {
+          "id": "F08",
+          "name": "Sàn dễ vỡ 08",
+          "board": {
+            "rows": [
+              "F.. F..S",
+              ". F....F",
+              "...... .",
+              "..F.  .F",
+              "......F.",
+              ".......G"
+            ]
+          }
+        },
+        {
+          "id": "F09",
+          "name": "Sàn dễ vỡ 09",
+          "board": {
+            "rows": [
+              ". F.....",
+              "....  ..",
+              " ...... ",
+              "..F.... ",
+              ".... .S ",
+              "  G.. . ",
+              "  ...F.."
+            ]
+          }
+        },
+        {
+          "id": "F10",
+          "name": "Sàn dễ vỡ 10",
+          "board": {
+            "rows": [
+              "..F.SF.",
+              ". . .  ",
+              "  G . F",
+              ".....F ",
+              "F.. F..",
+              ".F.F .F"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "switches",
+      "name": "03 · Công tắc và cầu",
+      "description": "Phối hợp công tắc mềm/nặng, cầu toggle/open; lời giải ngắn nhất 15–22 thao tác.",
+      "cases": [
+        {
+          "id": "S01",
+          "name": "Công tắc và cầu 01",
+          "board": {
+            "rows": [
+              "...  ....",
+              "  ..  ...",
+              " . . . ..",
+              " .B.. .. ",
+              "..B o.S. ",
+              ".....G.h "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  4,
+                  4
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  5,
+                  7
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  4,
+                  2
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  3,
+                  2
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S02",
+          "name": "Công tắc và cầu 02",
+          "board": {
+            "rows": [
+              ". B...  ",
+              " ...h. .",
+              " .. o.. ",
+              ".G.B... ",
+              "S  .. ..",
+              "......  ",
+              "..... .."
+            ],
+            "switches": [
+              {
+                "cell": [
+                  2,
+                  4
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  1,
+                  4
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  0,
+                  2
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  3,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S03",
+          "name": "Công tắc và cầu 03",
+          "board": {
+            "rows": [
+              " h..... ",
+              "..... . ",
+              ".o.   ..",
+              "SB .. . ",
+              " B......",
+              "....G...",
+              "... ....",
+              " ... ..."
+            ],
+            "switches": [
+              {
+                "cell": [
+                  2,
+                  1
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  0,
+                  1
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  3,
+                  1
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  4,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S04",
+          "name": "Công tắc và cầu 04",
+          "board": {
+            "rows": [
+              ".o.  ....",
+              "...  ..B.",
+              "....h... ",
+              "..S .  . ",
+              ".. .G.B..",
+              "...... .."
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  1
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  2,
+                  4
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  4,
+                  6
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  1,
+                  7
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S05",
+          "name": "Công tắc và cầu 05",
+          "board": {
+            "rows": [
+              ".... ....",
+              ".........",
+              "  ...... ",
+              "... .....",
+              ".B. .   .",
+              ".B..... .",
+              ".. G.... ",
+              "..o.h S.."
+            ],
+            "switches": [
+              {
+                "cell": [
+                  7,
+                  2
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  7,
+                  4
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  5,
+                  1
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  4,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S06",
+          "name": "Công tắc và cầu 06",
+          "board": {
+            "rows": [
+              "...B.....",
+              " ..... . ",
+              ".... h...",
+              ".. B. ...",
+              ". .G ....",
+              ".... . o.",
+              "... ...S ",
+              "........."
+            ],
+            "switches": [
+              {
+                "cell": [
+                  5,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  2,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  0,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  3,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S07",
+          "name": "Công tắc và cầu 07",
+          "board": {
+            "rows": [
+              ". . ..B.G",
+              "... S..  ",
+              "...  ....",
+              " . .B. ..",
+              ".. ...o..",
+              "... . ..h"
+            ],
+            "switches": [
+              {
+                "cell": [
+                  4,
+                  6
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  5,
+                  8
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  0,
+                  6
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  3,
+                  4
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S08",
+          "name": "Công tắc và cầu 08",
+          "board": {
+            "rows": [
+              ".. .....",
+              ". . ...B",
+              ". . . ..",
+              ". S. .G.",
+              "... ... ",
+              "....B. .",
+              "o.h... ."
+            ],
+            "switches": [
+              {
+                "cell": [
+                  6,
+                  0
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  6,
+                  2
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  1,
+                  7
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  4
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S09",
+          "name": "Công tắc và cầu 09",
+          "board": {
+            "rows": [
+              "... ...  ",
+              "...h.oS .",
+              ".... .B .",
+              "... ...B.",
+              ".. ..  . ",
+              " . . ....",
+              " ...  .G."
+            ],
+            "switches": [
+              {
+                "cell": [
+                  1,
+                  5
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  1,
+                  3
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  3,
+                  7
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  2,
+                  6
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "S10",
+          "name": "Công tắc và cầu 10",
+          "board": {
+            "rows": [
+              ". ......S",
+              " ....o...",
+              ".. ......",
+              " B...  ..",
+              "..G . . .",
+              ".h.B.. .."
+            ],
+            "switches": [
+              {
+                "cell": [
+                  1,
+                  5
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  5,
+                  1
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  5,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  3,
+                  1
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "combined",
+      "name": "04 · Kết hợp",
+      "description": "Tách/đổi điều khiển/ghép khối, ô dễ vỡ và công tắc/cầu; từ 23 thao tác.",
+      "cases": [
+        {
+          "id": "M01",
+          "name": "Kết hợp 01",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              "...BF....       ",
+              " ....F .        ",
+              ".... h...       ",
+              ".. B. ...       ",
+              ". .G ....       ",
+              ".... . o.       ",
+              "... .F..        ",
+              ".........       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    8,
+                    4
+                  ],
+                  [
+                    6,
+                    8
+                  ]
+                ],
+                "active": 0
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M02",
+          "name": "Kết hợp 02",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              ".F.B.....       ",
+              " ..... F        ",
+              ".... h...       ",
+              ".. BF ...       ",
+              ". .G ....       ",
+              ".... . o.       ",
+              "... .F..        ",
+              ".........       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    6,
+                    7
+                  ],
+                  [
+                    9,
+                    4
+                  ]
+                ],
+                "active": 1
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M03",
+          "name": "Kết hợp 03",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              ". .......       ",
+              " ....o...       ",
+              ".. ......       ",
+              " B...  F.       ",
+              "..G . . F       ",
+              ".h.B.. ..       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    7,
+                    7
+                  ],
+                  [
+                    3,
+                    6
+                  ]
+                ],
+                "active": 1
+              },
+              {
+                "cell": [
+                  3,
+                  5
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  7,
+                  1
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  7,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M04",
+          "name": "Kết hợp 04",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              "...BF....       ",
+              " ..... .        ",
+              ".... h...       ",
+              ".. B. .F.       ",
+              ". .G ..F.       ",
+              ".... . o.       ",
+              "..F ....        ",
+              ".........       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    6,
+                    6
+                  ],
+                  [
+                    7,
+                    3
+                  ]
+                ],
+                "active": 1
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M05",
+          "name": "Kết hợp 05",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              "F..B.F..F       ",
+              " ..... .        ",
+              ".... h.F.       ",
+              ".. B. ...       ",
+              ". .G ....       ",
+              ".... . o.       ",
+              "... ....        ",
+              ".........       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    6,
+                    8
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ],
+                "active": 1
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M06",
+          "name": "Kết hợp 06",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              "...B.....       ",
+              " ..... .        ",
+              ".... h...       ",
+              "F. B. F..       ",
+              ". .G ....       ",
+              ".F.. . o.       ",
+              "... ....        ",
+              ".........       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    8,
+                    1
+                  ],
+                  [
+                    7,
+                    8
+                  ]
+                ],
+                "active": 1
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M07",
+          "name": "Kết hợp 07",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              "...BF....       ",
+              " ..... F        ",
+              ".... h...       ",
+              ".. B. ...       ",
+              ". .G ...F       ",
+              ".... . o.       ",
+              "..F ....        ",
+              ".......F.       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    2,
+                    6
+                  ],
+                  [
+                    9,
+                    2
+                  ]
+                ],
+                "active": 1
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M08",
+          "name": "Kết hợp 08",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              "...B....F       ",
+              " ..... .        ",
+              ".... h...       ",
+              ".. BF ...       ",
+              ". .G ....       ",
+              ".... . oF       ",
+              "F.. ....        ",
+              "......F..       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    7,
+                    0
+                  ],
+                  [
+                    9,
+                    5
+                  ]
+                ],
+                "active": 0
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M09",
+          "name": "Kết hợp 09",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              "...B.....       ",
+              " ..... .        ",
+              ".... h...       ",
+              ".. B. ...       ",
+              ". .G ...F       ",
+              "..F. . o.       ",
+              "... ....        ",
+              "...F.....       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    9,
+                    8
+                  ],
+                  [
+                    7,
+                    0
+                  ]
+                ],
+                "active": 0
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "M10",
+          "name": "Kết hợp 10",
+          "board": {
+            "rows": [
+              "S..............x",
+              "                ",
+              "...B.....       ",
+              " ..... F        ",
+              "F... hF..       ",
+              ".. B. ...       ",
+              ". .G ....       ",
+              ".... . o.       ",
+              "... ....        ",
+              ".........       "
+            ],
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  15
+                ],
+                "destinations": [
+                  [
+                    2,
+                    0
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "active": 1
+              },
+              {
+                "cell": [
+                  7,
+                  7
+                ],
+                "effects": {
+                  "soft-gate": "toggle"
+                }
+              },
+              {
+                "cell": [
+                  4,
+                  5
+                ],
+                "effects": {
+                  "heavy-gate": "open"
+                }
+              }
+            ],
+            "bridges": {
+              "soft-gate": [
+                [
+                  2,
+                  3
+                ]
+              ],
+              "heavy-gate": [
+                [
+                  5,
+                  3
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "unsolvable",
+      "name": "05 · Không có đường đi",
+      "description": "Ba màn vô nghiệm: đích tách rời, ô dễ vỡ chặn điểm đứng bắt buộc, cầu đóng với công tắc ở phía bên kia.",
+      "cases": [
+        {
+          "id": "N01",
+          "name": "Đích tách rời",
+          "board": {
+            "rows": [
+              "S... ..G",
+              ".... ...",
+              ".... ..."
+            ]
+          }
+        },
+        {
+          "id": "N02",
+          "name": "Ô dễ vỡ chặn điểm đứng",
+          "board": {
+            "rows": [
+              "S..F..G"
+            ]
+          }
+        },
+        {
+          "id": "N03",
+          "name": "Công tắc nằm sau cầu đóng",
+          "board": {
+            "rows": [
+              "S..B..h..G"
+            ],
+            "bridges": {
+              "gate": [
+                [
+                  0,
+                  3
+                ]
+              ]
+            },
+            "switches": [
+              {
+                "cell": [
+                  0,
+                  6
+                ],
+                "effects": {
+                  "gate": "open"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

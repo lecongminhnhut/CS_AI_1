@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bloxorz Solver</title>
+  <link rel="stylesheet" href="/style.css?v=play-only">
+</head>
+<body>
+  <main>
+    <div class="workspace">
+      <div class="play-column">
+      <header class="topbar">
+        <div><a class="brand" href="/" aria-label="Bloxorz trang chủ">Bloxorz Solver</a><p class="tagline">CSC14003 · Nhập môn Trí tuệ nhân tạo</p></div>
+        <span id="current-stage" class="stage-pill">Đang tải màn chơi…</span>
+      </header>
+      <section class="play-area" aria-label="Không gian game 3D">
+        <div class="scene-header"><span class="scene-label"><i></i> <span id="stage-name">Sân đá</span></span><button class="quiet" id="camera-reset" title="Đặt lại góc nhìn">↺ Góc nhìn</button></div>
+        <div id="viewport" tabindex="0" aria-label="Bàn chơi 3D. Dùng các phím mũi tên để lăn khối."></div>
+        <div id="tile-tooltip" role="tooltip" hidden></div>
+        <div class="result-overlay" id="overlay" hidden><div role="region" aria-labelledby="result-title"><div class="result-heading"><span id="result-icon" aria-hidden="true">✓</span><p class="eyebrow">KẾT QUẢ MÀN CHƠI</p></div><h2 id="result-title">Hoàn thành màn chơi</h2><p id="result-copy"></p><div class="result-actions"><button id="overlay-restart" class="secondary">Chơi lại</button><button id="overlay-next" class="primary" hidden>Màn tiếp theo →</button></div></div></div>
+      </section>
+        <div class="scene-note"><span>↔ Xoay tối đa 45° mỗi bên · Cuộn để thu phóng</span><span id="orientation">KHỐI ĐỨNG</span></div>
+        <div class="legend" aria-label="Chú thích ô đặc biệt — rê chuột vào ô trên bản đồ để xem chi tiết">
+          <span tabindex="0" title="Đứng khối nguyên vào giếng để về đích."><i class="tile-preview" data-tile="G" aria-hidden="true"></i><b>Ô đích</b><small>Đứng thẳng vào lỗ</small></span>
+          <span tabindex="0" title="Đỡ khối nằm hoặc khối con; vỡ khi khối nguyên đứng lên."><i class="tile-preview" data-tile="F" aria-hidden="true"></i><b>Ô dễ vỡ</b><small>Không được đứng</small></span>
+          <span tabindex="0" title="Công tắc điều khiển đóng/mở cầu; chỉ đi qua khi mở."><i class="tile-preview" data-tile="B" aria-hidden="true"></i><b>Cầu</b><small>Mở / đóng bằng công tắc</small></span>
+          <span tabindex="0" title="Nhận khối đứng, khối nằm và khối con."><i class="tile-preview" data-tile="o" aria-hidden="true"></i><b>Công tắc mềm</b><small>Chạm là kích hoạt</small></span>
+          <span tabindex="0" title="Chỉ nhận khối nguyên đứng."><i class="tile-preview" data-tile="h" aria-hidden="true"></i><b>Công tắc nặng</b><small>Phải đứng lên</small></span>
+          <span tabindex="0" title="Đứng khối nguyên lên để tách. Click hoặc Space để chọn khối con."><i class="tile-preview" data-tile="x" aria-hidden="true"></i><b>Công tắc tách</b><small>Tách thành 2 khối</small></span>
+        </div>
+      </div>
+      <aside class="panel">
+        <section class="panel-card level-card" aria-labelledby="level-heading">
+          <div class="card-heading"><h2 id="level-heading"><label for="level">Màn chơi</label></h2></div>
+          <div class="level-navigation"><button id="previous-level" class="secondary icon-button" aria-label="Màn trước" title="Màn trước (P)" disabled>‹</button><div class="level-choice"><span class="chapter">— / —</span><select id="level" disabled><option>Đang tải…</option></select></div><button id="next-level" class="secondary icon-button" aria-label="Màn sau" title="Màn sau (N)" disabled>›</button></div>
+          <p id="level-description" class="muted">Tìm đường qua khu vườn lơ lửng.</p>
+          <div class="button-row"><button id="fresh-game" class="secondary" title="Bắt đầu lại từ màn đầu tiên" disabled>＋ Ván mới</button><button id="restart" class="secondary" disabled>↻ Chơi lại</button></div>
+        </section>
+        <section class="panel-card" aria-labelledby="state-heading">
+          <div class="card-heading"><h2 id="state-heading">Trạng thái</h2></div>
+          <div class="stats"><div><small>Số nước</small><span id="moves">0</span></div><div><small>Hướng khối</small><span id="block-state">—</span></div><div><small>Cầu đang mở</small><span id="bridge-count">—</span></div></div>
+        </section>
+        <section class="panel-card solver" aria-labelledby="solver-heading">
+          <div class="card-heading"><h2 id="solver-heading">Bộ giải</h2><span class="card-meta">Không giới hạn thời gian</span></div>
+          <div class="algorithms"><button data-solver="bfs" disabled>BFS</button><button data-solver="dfs" disabled title="DFS với độ sâu tăng dần (IDS)">DFS</button><button data-solver="ucs" disabled>UCS</button><button data-solver="astar" disabled>A*</button></div>
+          <div id="metrics"><div><span>Độ dài</span><b id="search-length">—</b></div><div><span>Chi phí</span><b id="search-cost">—</b></div><div><span>Node mở rộng</span><b id="search-nodes">—</b></div><div><span>Thời gian</span><b id="search-time">—</b></div><div><span>Bộ nhớ đỉnh</span><b id="search-memory">—</b></div><div><span>Kết quả</span><b id="search-result">—</b></div></div>
+          <div class="solver-feedback"><div class="status" id="status" role="status" aria-live="polite">Đang tải màn chơi…</div><div id="replay-progress" hidden><div class="replay-caption"><span>Phát lại lời giải</span><span id="replay-count">0 / 0</span></div><progress id="replay-bar" max="1" value="0" aria-label="Tiến độ phát lại"></progress></div></div>
+          <div class="replay-actions"><button id="replay" class="secondary" disabled>▶ Phát lại</button><button id="stop-replay" class="secondary" hidden title="Dừng sau bước lăn hiện tại">■ Dừng lời giải</button><button id="step-replay" class="secondary" disabled>▸│ Từng bước</button></div>
+        </section>
+        <section class="panel-card controls" aria-labelledby="controls-heading">
+          <div class="card-heading"><h2 id="controls-heading">Phím tắt</h2><button id="help" class="help-button" title="Hướng dẫn chơi">Cách chơi ↗</button></div>
+          <div class="shortcuts"><span><kbd>↑ ↓ ← →</kbd> Lăn khối</span><span><button data-action="switch" id="switch" disabled title="Đổi khối sau khi tách">Space</button> Đổi khối</span><span><kbd>R</kbd> Chơi lại</span><span><kbd>N / P</kbd> Màn kế / trước</span></div>
+          <div class="touch-controls"><div class="direction-pad" aria-label="Điều khiển khối"><button data-action="up" class="up" aria-label="Lăn lên" disabled>↑</button><button data-action="left" class="left" aria-label="Lăn trái" disabled>←</button><button data-action="down" class="down" aria-label="Lăn xuống" disabled>↓</button><button data-action="right" class="right" aria-label="Lăn phải" disabled>→</button></div><p class="key-hint">W A S D cũng để lăn<br>Click khối con để chọn</p></div>
+        </section>
+      </aside>
+    </div>
+    <section class="panel-card testcase-panel" aria-labelledby="testcase-heading">
+      <div class="card-heading"><h2 id="testcase-heading">Danh sách testcase</h2><span class="card-meta" id="testcase-count">Đang tải…</span></div>
+      <p class="muted">Chọn thuật toán để chạy từ đầu mỗi màn, không giới hạn thời gian. Kết quả giữ trong phiên trang này, hãy xuất trước khi tải lại.</p>
+      <fieldset id="test-algorithms" class="testcase-algorithms" disabled>
+        <legend>Thuật toán · chọn một hoặc nhiều</legend>
+        <label><input type="checkbox" value="bfs" checked> BFS</label>
+        <label><input type="checkbox" value="dfs" checked> DFS/IDS</label>
+        <label><input type="checkbox" value="ucs" checked> UCS</label>
+        <label><input type="checkbox" value="astar" checked> A*</label>
+      </fieldset>
+      <div class="testcase-toolbar">
+        <label for="test-group">Nhóm độ khó</label><select id="test-group" disabled><option>Đang tải…</option></select>
+        <label><input id="test-select-all" type="checkbox" checked disabled> Chọn tất cả</label>
+        <button id="test-run" class="primary" disabled>Chạy danh sách</button>
+        <button id="test-stop" class="secondary" hidden>Dừng sau lượt hiện tại</button>
+        <button id="test-csv" class="secondary" disabled>Xuất CSV</button>
+        <button id="test-json" class="secondary" disabled>Xuất JSON</button>
+      </div>
+      <div id="test-list" class="testcase-list" aria-label="Chọn các màn cần chạy"></div>
+      <p id="test-status" class="muted" role="status" aria-live="polite">Đang tải testcase…</p>
+      <progress id="test-progress" max="1" value="0" aria-label="Tiến độ chạy testcase" hidden></progress>
+      <div class="testcase-table"><table><caption>Kết quả lần chạy danh sách gần nhất</caption><thead><tr><th scope="col">Nhóm</th><th scope="col">Màn</th><th scope="col">Thuật toán</th><th scope="col">Kết quả</th><th scope="col">Thời gian (ms)</th><th scope="col">Bộ nhớ (KiB)</th><th scope="col">Node mở rộng</th><th scope="col">Số bước</th><th scope="col">Chi phí</th></tr></thead><tbody id="test-results"></tbody></table></div>
+    </section>
+    <details id="instructions"><summary>Hướng dẫn chơi & quy tắc các ô <span>+</span></summary><div class="rules"><p><b>01 / Về đích</b>Lăn khối nguyên đứng vào giếng đích. Khối nằm ngang qua đích chưa hoàn thành màn chơi.</p><p><b>02 / Giữ thăng bằng</b>Rơi khỏi sàn sẽ thua. Sàn yếu có vết nứt chỉ đỡ khối nằm hoặc khối con.</p><p><b>03 / Mở đường</b>○ nhận mọi khối; × chỉ nhận khối nguyên đứng. Công tắc đổi trạng thái hoặc đặt trạng thái cầu. Rê chuột vào ô đặc biệt để xem chú thích.</p><p><b>04 / Chia để đi</b>Đứng trên công tắc tách (). Click khối con hoặc Space để chọn; đặt hai khối liền cạnh để tự ghép lại.</p></div></details>
+    <footer><span>BLOXORZ SOLVER</span><span>Engine Python · Hiển thị Three.js</span></footer>
+  </main>
+  <script type="module">
+    import('/game.js?v=ground-fit').catch(error => {
+      document.querySelector('#status').textContent = 'Không thể mở 3D. Hãy bật WebGL2 hoặc thử Chrome/Edge. ' + error.message;
+    });
+  </script>
+</body>
+</html>

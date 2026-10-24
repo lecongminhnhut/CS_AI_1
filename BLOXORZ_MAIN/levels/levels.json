@@ -1,0 +1,818 @@
+[
+  {
+    "name": "Stage 01",
+    "passcode": "780464",
+    "rows": [
+      "...       ",
+      ".S....    ",
+      "......... ",
+      " .........",
+      "     ..G..",
+      "      ... "
+    ]
+  },
+  {
+    "name": "Stage 02",
+    "passcode": "290299",
+    "rows": [
+      "      ....  ...",
+      "....  ..h.  .G.",
+      "..o.  ....  ...",
+      "....  ....  ...",
+      ".S..BB....BB...",
+      "....  ....     "
+    ],
+    "bridges": {
+      "bridge-0": [[4, 4], [4, 5]],
+      "bridge-1": [[4, 10], [4, 11]]
+    },
+    "switches": [
+      {"cell": [2, 2], "effects": {"bridge-0": "toggle"}},
+      {"cell": [1, 8], "effects": {"bridge-1": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 03",
+    "passcode": "918660",
+    "rows": [
+      "      .......  ",
+      "....  ...  ..  ",
+      ".........  ....",
+      ".S..       ..G.",
+      "....        ...",
+      "               "
+    ]
+  },
+  {
+    "name": "Stage 04",
+    "passcode": "520967",
+    "rows": [
+      "   FFFFFFF    ",
+      "   FFFFFFF    ",
+      "....     ...  ",
+      "...       ..  ",
+      "...       ..  ",
+      ".S.  ....FFFFF",
+      "...  ....FFFFF",
+      "     .G.  FF.F",
+      "     ...  FFFF"
+    ]
+  },
+  {
+    "name": "Stage 05",
+    "passcode": "028431",
+    "rows": [
+      "           ....",
+      " ....BB.o....S.",
+      " ....       ...",
+      " ..o.          ",
+      " ....          ",
+      "   ...o.BB...  ",
+      "          ....o",
+      "...       .....",
+      ".G...BB......  ",
+      "....           "
+    ],
+    "bridges": {
+      "bridge-0": [[1, 5], [1, 6]],
+      "bridge-1": [[5, 8], [5, 9]],
+      "bridge-2": [[8, 5], [8, 6]]
+    },
+    "initially_open": ["bridge-0", "bridge-1", "bridge-2"],
+    "switches": [
+      {"cell": [1, 8], "effects": {"bridge-0": "toggle"}},
+      {"cell": [3, 3], "effects": {"bridge-2": "open"}},
+      {"cell": [5, 6], "effects": {"bridge-2": "close"}},
+      {"cell": [6, 14], "effects": {"bridge-2": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 06",
+    "passcode": "524383",
+    "rows": [
+      "     ......    ",
+      "     .  ...    ",
+      "     .  .....  ",
+      "S.....     ....",
+      "    ...    ..G.",
+      "    ...     ...",
+      "      .  ..    ",
+      "      .....    ",
+      "      .....    ",
+      "       ...     "
+    ]
+  },
+  {
+    "name": "Stage 07",
+    "passcode": "189493",
+    "rows": [
+      "        ....   ",
+      "        ....   ",
+      "...     .  ....",
+      ".S.......   .G.",
+      "...    ..h  ...",
+      "...    ...  ...",
+      " ..B   .       ",
+      "  ......       "
+    ],
+    "bridges": {
+      "bridge-0": [[6, 3]]
+    },
+    "switches": [
+      {"cell": [4, 9], "effects": {"bridge-0": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 08",
+    "passcode": "499707",
+    "rows": [
+      "         ...   ",
+      "         ...   ",
+      "         ...   ",
+      "......   ......",
+      ".S..x.   ....G.",
+      "......   ......",
+      "         ...   ",
+      "         ...   ",
+      "         ...   "
+    ],
+    "switches": [
+      {"cell": [4, 4], "destinations": [[1, 10], [7, 10]]}
+    ]
+  },
+  {
+    "name": "Stage 09",
+    "passcode": "074355",
+    "rows": [
+      "....   .   ....",
+      ".S..   .   ..x.",
+      "...............",
+      "      .G.      ",
+      "      ...      "
+    ],
+    "switches": [
+      {"cell": [1, 13], "destinations": [[1, 2], [1, 12]], "active": 1}
+    ]
+  },
+  {
+    "name": "Stage 10",
+    "passcode": "300590",
+    "rows": [
+      "...     ......",
+      ".G.BB.BB.S..x.",
+      "...     ....B ",
+      "         ...B ",
+      "           .. ",
+      "            . ",
+      "            . ",
+      "           .. ",
+      "    .....  .. ",
+      "    .o  ...h. "
+    ],
+    "bridges": {
+      "bridge-0": [[1, 3], [1, 4]],
+      "bridge-1": [[1, 6], [1, 7]],
+      "bridge-2": [[2, 12], [3, 12]]
+    },
+    "switches": [
+      {"cell": [9, 5], "effects": {"bridge-0": "toggle"}},
+      {"cell": [9, 11], "effects": {"bridge-1": "toggle", "bridge-2": "toggle"}},
+      {"cell": [1, 12], "destinations": [[1, 9], [1, 12]], "active": 1}
+    ]
+  },
+  {
+    "name": "Stage 11",
+    "passcode": "291709",
+    "rows": [
+      " ...B       ",
+      " .G.B       ",
+      " ...        ",
+      " .   ...... ",
+      " .   ..  .. ",
+      "S......  ...",
+      "     .o    .",
+      "     ....  .",
+      "     .......",
+      "        ... "
+    ],
+    "bridges": {
+      "bridge-0": [[0, 4], [1, 4]]
+    },
+    "initially_open": ["bridge-0"],
+    "switches": [
+      {"cell": [6, 6], "effects": {"bridge-0": "close"}}
+    ]
+  },
+  {
+    "name": "Stage 12",
+    "passcode": "958640",
+    "rows": [
+      "            h",
+      "     ...  ...",
+      "     .h.....B",
+      "   .....  .. ",
+      "   .G.B   .. ",
+      " .....   ....",
+      "..S.     ....",
+      "....  .....  ",
+      "     ...     ",
+      "     ...     "
+    ],
+    "bridges": {
+      "bridge-0": [[2, 12]],
+      "bridge-1": [[4, 6]]
+    },
+    "switches": [
+      {"cell": [0, 12], "effects": {"bridge-1": "toggle"}},
+      {"cell": [2, 6], "effects": {"bridge-0": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 13",
+    "passcode": "448106",
+    "rows": [
+      "...F....F.... ",
+      "..        ... ",
+      "..         ...",
+      "...   ...  .S.",
+      "...FFF.G.  ...",
+      "...  F...  .  ",
+      "  .  FFFFF..  ",
+      "  ...FF.FFF   ",
+      "   ..FFFFFF   ",
+      "   ...  ..    "
+    ]
+  },
+  {
+    "name": "Stage 14",
+    "passcode": "210362",
+    "rows": [
+      "        ...   ",
+      "   ...  ...   ",
+      ".BB.S.........",
+      ".BB...      h.",
+      ".           ..",
+      ".           ..",
+      ".       ......",
+      ".....   ...   ",
+      " ..G.   ...   ",
+      "  ...   .....h"
+    ],
+    "bridges": {
+      "bridge-0": [[2, 1], [2, 2]],
+      "bridge-1": [[3, 1], [3, 2]]
+    },
+    "switches": [
+      {"cell": [3, 12], "effects": {"bridge-0": "toggle"}},
+      {"cell": [9, 13], "effects": {"bridge-1": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 15",
+    "passcode": "098598",
+    "rows": [
+      "       ...  ...",
+      "    .BB...BBh..",
+      "..BB.  ...  ...",
+      ".....   o      ",
+      "..             ",
+      " .     x       ",
+      " .     .       ",
+      "...   ...  o.. ",
+      ".S.......BB.G. ",
+      "...   ...  o.. "
+    ],
+    "bridges": {
+      "bridge-0": [[1, 5], [1, 6]],
+      "bridge-1": [[1, 10], [1, 11]],
+      "bridge-2": [[2, 2], [2, 3]],
+      "bridge-3": [[8, 9], [8, 10]]
+    },
+    "initially_open": ["bridge-0", "bridge-3"],
+    "switches": [
+      {"cell": [1, 12], "effects": {"bridge-0": "toggle", "bridge-2": "toggle"}},
+      {"cell": [3, 8], "effects": {"bridge-0": "toggle", "bridge-1": "toggle"}},
+      {"cell": [7, 11], "effects": {"bridge-3": "close"}},
+      {"cell": [9, 11], "effects": {"bridge-3": "close"}},
+      {"cell": [5, 7], "destinations": [[1, 13], [8, 1]]}
+    ]
+  },
+  {
+    "name": "Stage 16",
+    "passcode": "000241",
+    "rows": [
+      " x        ...",
+      "x.xBBhh.BB.G.",
+      " x        ...",
+      "             ",
+      "             ",
+      "  ...   ...  ",
+      "  .S.....x.  ",
+      "  ...   ...  "
+    ],
+    "bridges": {
+      "bridge-0": [[1, 3], [1, 4]],
+      "bridge-1": [[1, 8], [1, 9]]
+    },
+    "switches": [
+      {"cell": [1, 5], "effects": {"bridge-0": "open"}},
+      {"cell": [1, 6], "effects": {"bridge-1": "open"}},
+      {"cell": [0, 1], "destinations": [[1, 5], [1, 7]], "active": 1},
+      {"cell": [1, 0], "destinations": [[0, 1], [1, 2]], "active": 1},
+      {"cell": [1, 2], "destinations": [[1, 0], [1, 2]]},
+      {"cell": [2, 1], "destinations": [[1, 0], [2, 1]], "active": 1},
+      {"cell": [6, 9], "destinations": [[0, 1], [1, 0]]}
+    ]
+  },
+  {
+    "name": "Stage 17",
+    "passcode": "683596",
+    "rows": [
+      "...            ",
+      ".S.......B  ...",
+      "...    B.....G.",
+      "...         hh.",
+      "...            ",
+      "...            ",
+      "...   B.....h  ",
+      "........B  ..  ",
+      ".o.        ..  ",
+      "...        .h  "
+    ],
+    "bridges": {
+      "bridge-0": [[1, 9]],
+      "bridge-1": [[2, 7]],
+      "bridge-2": [[6, 6]],
+      "bridge-3": [[7, 8]]
+    },
+    "switches": [
+      {"cell": [3, 12], "effects": {"bridge-2": "close"}},
+      {"cell": [3, 13], "effects": {"bridge-2": "open"}},
+      {"cell": [6, 12], "effects": {"bridge-1": "open"}},
+      {"cell": [8, 1], "effects": {"bridge-3": "toggle"}},
+      {"cell": [9, 12], "effects": {"bridge-0": "open", "bridge-3": "close"}}
+    ]
+  },
+  {
+    "name": "Stage 18",
+    "passcode": "284933",
+    "rows": [
+      "       o       ",
+      "..o.   .       ",
+      ".....  .       ",
+      ".oS.....BB..BB.",
+      ".....B  .   .  ",
+      "..o.    .   .  ",
+      ".       o  ... ",
+      ".         ..G. ",
+      ".BBh      .... "
+    ],
+    "bridges": {
+      "bridge-0": [[3, 8], [3, 9]],
+      "bridge-1": [[3, 12], [3, 13]],
+      "bridge-2": [[4, 5]],
+      "bridge-3": [[8, 1], [8, 2]]
+    },
+    "switches": [
+      {"cell": [0, 7], "effects": {"bridge-0": "open"}},
+      {"cell": [1, 2], "effects": {"bridge-1": "close", "bridge-3": "close"}},
+      {"cell": [3, 1], "effects": {"bridge-0": "close"}},
+      {"cell": [5, 2], "effects": {"bridge-1": "close", "bridge-3": "close"}},
+      {"cell": [6, 8], "effects": {"bridge-1": "open", "bridge-3": "open"}},
+      {"cell": [8, 3], "effects": {"bridge-2": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 19",
+    "passcode": "119785",
+    "rows": [
+      " S........o....",
+      "     ..      ..",
+      "     ..      ..",
+      "             ..",
+      "             ..",
+      "...  ..BB.o....",
+      ".G.  ..        ",
+      "...  ..        ",
+      " ..  ..        ",
+      " .BB......o... "
+    ],
+    "bridges": {
+      "bridge-0": [[5, 7], [5, 8]],
+      "bridge-1": [[9, 2], [9, 3]]
+    },
+    "initially_open": ["bridge-1"],
+    "switches": [
+      {"cell": [0, 10], "effects": {"bridge-0": "toggle"}},
+      {"cell": [5, 10], "effects": {"bridge-1": "close"}},
+      {"cell": [9, 10], "effects": {"bridge-1": "open"}}
+    ]
+  },
+  {
+    "name": "Stage 20",
+    "passcode": "543019",
+    "rows": [
+      "            ...",
+      "  ...BB...BB...",
+      "  ...  oS.  ...",
+      "  ...  ...     ",
+      "  .o.  x.o     ",
+      "  ...  ...     ",
+      "....   ...BBo..",
+      ".o          ...",
+      "            .G.",
+      "            ..."
+    ],
+    "bridges": {
+      "bridge-0": [[1, 5], [1, 6]],
+      "bridge-1": [[1, 10], [1, 11]],
+      "bridge-2": [[6, 10], [6, 11]]
+    },
+    "initially_open": ["bridge-0"],
+    "switches": [
+      {"cell": [2, 7], "effects": {"bridge-0": "close"}},
+      {"cell": [4, 3], "effects": {"bridge-0": "close"}},
+      {"cell": [4, 9], "effects": {"bridge-0": "close"}},
+      {"cell": [6, 12], "effects": {"bridge-2": "toggle"}},
+      {"cell": [7, 1], "effects": {"bridge-1": "toggle"}},
+      {"cell": [4, 7], "destinations": [[1, 13], [7, 13]]}
+    ]
+  },
+  {
+    "name": "Stage 21",
+    "passcode": "728724",
+    "rows": [
+      "        ..     ",
+      "       ...     ",
+      "..  ......     ",
+      ".S....  .      ",
+      "....    .   ...",
+      " ..     h....G.",
+      "  .     h.  ...",
+      "  ...B  ..     ",
+      "   ...  ..     ",
+      "   B......     "
+    ],
+    "bridges": {
+      "bridge-0": [[7, 5]],
+      "bridge-1": [[9, 3]]
+    },
+    "switches": [
+      {"cell": [5, 8], "effects": {"bridge-1": "toggle"}},
+      {"cell": [6, 8], "effects": {"bridge-0": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 22",
+    "passcode": "987319",
+    "rows": [
+      "     ..    ...",
+      "   ......  .G.",
+      "......o.......",
+      ".S..o  .....B ",
+      "...      ...  ",
+      " .        .   ",
+      " .        .   ",
+      " .B      B.   ",
+      " ..      ..   ",
+      "  h      h    "
+    ],
+    "bridges": {
+      "bridge-0": [[3, 12]],
+      "bridge-1": [[7, 2]],
+      "bridge-2": [[7, 9]]
+    },
+    "initially_open": ["bridge-2"],
+    "switches": [
+      {"cell": [2, 6], "effects": {"bridge-0": "close", "bridge-1": "close"}},
+      {"cell": [3, 4], "effects": {"bridge-0": "close", "bridge-1": "close"}},
+      {"cell": [9, 2], "effects": {"bridge-0": "toggle"}},
+      {"cell": [9, 9], "effects": {"bridge-1": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 23",
+    "passcode": "293486",
+    "rows": [
+      " ...        ...",
+      " .h.        .o.",
+      " ...   ...BB...",
+      "B...B  .G.  ..o",
+      ".   .  ...    .",
+      "o   .  FFF    .",
+      ".BB...FFFFF...B",
+      "   .S.FFFFF.x. ",
+      "   ...FFFFF... ",
+      "   .....B      "
+    ],
+    "bridges": {
+      "bridge-0": [[2, 10], [2, 11]],
+      "bridge-1": [[3, 0]],
+      "bridge-2": [[3, 4]],
+      "bridge-3": [[6, 1], [6, 2]],
+      "bridge-4": [[6, 14]],
+      "bridge-5": [[9, 8]]
+    },
+    "initially_open": ["bridge-0", "bridge-4"],
+    "switches": [
+      {"cell": [1, 2], "effects": {"bridge-2": "open"}},
+      {"cell": [1, 13], "effects": {"bridge-3": "open", "bridge-5": "toggle"}},
+      {"cell": [3, 14], "effects": {"bridge-0": "close", "bridge-4": "close"}},
+      {"cell": [5, 0], "effects": {"bridge-1": "open", "bridge-3": "close"}},
+      {"cell": [7, 12], "destinations": [[2, 2], [7, 12]], "active": 1}
+    ]
+  },
+  {
+    "name": "Stage 24",
+    "passcode": "088198",
+    "rows": [
+      "          ....",
+      "   B.......h.x",
+      " SBB.h.   ....",
+      "h.  ..      . ",
+      "..  .       . ",
+      ".....     ... ",
+      "...  ...BB.G. ",
+      "     h.B  ... "
+    ],
+    "bridges": {
+      "bridge-0": [[1, 3]],
+      "bridge-1": [[2, 2], [2, 3]],
+      "bridge-2": [[6, 8], [6, 9]],
+      "bridge-3": [[7, 7]]
+    },
+    "switches": [
+      {"cell": [1, 11], "effects": {"bridge-1": "open"}},
+      {"cell": [2, 5], "effects": {"bridge-3": "open"}},
+      {"cell": [3, 0], "effects": {"bridge-0": "open"}},
+      {"cell": [7, 5], "effects": {"bridge-2": "open"}},
+      {"cell": [1, 13], "destinations": [[6, 5], [6, 7]]}
+    ]
+  },
+  {
+    "name": "Stage 25",
+    "passcode": "250453",
+    "rows": [
+      "  ..          ",
+      "  ...         ",
+      "  ..o     ...B",
+      "   ....B  .G.B",
+      "      ..BB... ",
+      " ..   ..      ",
+      "..h.BB..      ",
+      ".SB   ..   ...",
+      "..B   ..o.....",
+      "           ..."
+    ],
+    "bridges": {
+      "bridge-0": [[2, 13], [3, 13]],
+      "bridge-1": [[3, 7]],
+      "bridge-2": [[4, 8], [4, 9]],
+      "bridge-3": [[6, 4], [6, 5]],
+      "bridge-4": [[7, 2], [8, 2]]
+    },
+    "initially_open": ["bridge-3", "bridge-4"],
+    "switches": [
+      {"cell": [2, 4], "effects": {"bridge-0": "toggle", "bridge-2": "toggle"}},
+      {"cell": [6, 2], "effects": {"bridge-2": "open"}},
+      {"cell": [8, 8], "effects": {"bridge-1": "open", "bridge-3": "close"}}
+    ]
+  },
+  {
+    "name": "Stage 26",
+    "passcode": "426329",
+    "rows": [
+      "     ....    x",
+      "     ..o...  .",
+      "    .......  .",
+      "..BB....  ....",
+      "...B  .   ..  ",
+      "...   .   S   ",
+      " .    ...     ",
+      " h    .G.B    ",
+      "      ...     "
+    ],
+    "bridges": {
+      "bridge-0": [[3, 2], [3, 3]],
+      "bridge-1": [[4, 3]],
+      "bridge-2": [[7, 9]]
+    },
+    "initially_open": ["bridge-0"],
+    "switches": [
+      {"cell": [1, 7], "effects": {"bridge-0": "close"}},
+      {"cell": [7, 1], "effects": {"bridge-1": "open", "bridge-2": "open"}},
+      {"cell": [0, 13], "destinations": [[3, 12], [5, 10]]}
+    ]
+  },
+  {
+    "name": "Stage 27",
+    "passcode": "660141",
+    "rows": [
+      "...    ........",
+      ".S.........  ..",
+      "...    ..    ..",
+      "            .h.",
+      "            .. ",
+      "...  FFFF.  oo ",
+      ".G.FFFFFFF  ...",
+      "...FFFFFFFFF...",
+      "     FFFFFFF...",
+      "      B..B     "
+    ],
+    "bridges": {
+      "bridge-0": [[9, 6]],
+      "bridge-1": [[9, 9]]
+    },
+    "initially_open": ["bridge-0", "bridge-1"],
+    "switches": [
+      {"cell": [3, 13], "effects": {"bridge-0": "close", "bridge-1": "close"}},
+      {"cell": [5, 12], "effects": {"bridge-0": "close"}},
+      {"cell": [5, 13], "effects": {"bridge-1": "close"}}
+    ]
+  },
+  {
+    "name": "Stage 28",
+    "passcode": "769721",
+    "rows": [
+      " ..BB..        ",
+      " ..  ...       ",
+      "FFS  ....      ",
+      "FF     ...     ",
+      "FF      ...    ",
+      "F...     ..x   ",
+      " .G.      .....",
+      " ......   .o...",
+      "  .  ..   ...  ",
+      "  .  ...BB...  "
+    ],
+    "bridges": {
+      "bridge-0": [[0, 3], [0, 4]],
+      "bridge-1": [[9, 8], [9, 9]]
+    },
+    "initially_open": ["bridge-0", "bridge-1"],
+    "switches": [
+      {"cell": [7, 11], "effects": {"bridge-0": "close", "bridge-1": "close"}},
+      {"cell": [5, 11], "destinations": [[6, 14], [9, 12]]}
+    ]
+  },
+  {
+    "name": "Stage 29",
+    "passcode": "691859",
+    "rows": [
+      "  oBB.   .BBh  ",
+      "     .   .     ",
+      "     .....     ",
+      "hBB....S....BBh",
+      "     .....     ",
+      "     B.  .     ",
+      "     B.  .BBo  ",
+      "...  ..  .     ",
+      ".G.BB.   .     ",
+      "...B     .BBo  "
+    ],
+    "bridges": {
+      "bridge-0": [[0, 3], [0, 4]],
+      "bridge-1": [[0, 10], [0, 11]],
+      "bridge-2": [[3, 1], [3, 2]],
+      "bridge-3": [[3, 12], [3, 13]],
+      "bridge-4": [[5, 5], [6, 5]],
+      "bridge-5": [[6, 10], [6, 11]],
+      "bridge-6": [[8, 3], [8, 4]],
+      "bridge-7": [[9, 3]],
+      "bridge-8": [[9, 10], [9, 11]]
+    },
+    "initially_open": ["bridge-0", "bridge-5", "bridge-8"],
+    "switches": [
+      {"cell": [0, 2], "effects": {"bridge-1": "open", "bridge-5": "close"}},
+      {"cell": [0, 12], "effects": {"bridge-4": "open"}},
+      {"cell": [3, 0], "effects": {"bridge-8": "close", "bridge-6": "open"}},
+      {"cell": [3, 14], "effects": {"bridge-7": "open"}},
+      {"cell": [6, 12], "effects": {"bridge-2": "open"}},
+      {"cell": [9, 12], "effects": {"bridge-0": "close", "bridge-1": "close", "bridge-3": "open"}}
+    ]
+  },
+  {
+    "name": "Stage 30",
+    "passcode": "280351",
+    "rows": [
+      "   .....FF.... ",
+      "   .G..     F. ",
+      "   ...      F.h",
+      "       F..BB...",
+      "  S    FF     .",
+      " h.F   FF     .",
+      "FFFF   ..B  B..",
+      "FFF.F.FF.F  h.B",
+      ".FFFFFFFFFFF.  ",
+      " F.FFF  FFFF.  "
+    ],
+    "bridges": {
+      "bridge-0": [[3, 10], [3, 11]],
+      "bridge-1": [[6, 9]],
+      "bridge-2": [[6, 12]],
+      "bridge-3": [[7, 14]]
+    },
+    "initially_open": ["bridge-0"],
+    "switches": [
+      {"cell": [2, 14], "effects": {"bridge-0": "close", "bridge-1": "open", "bridge-2": "open"}},
+      {"cell": [5, 1], "effects": {"bridge-0": "open"}},
+      {"cell": [7, 12], "effects": {"bridge-3": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 31",
+    "passcode": "138620",
+    "rows": [
+      "           ...B",
+      " ...    h  .G.B",
+      " ...BB...BB...B",
+      " ...  ...   .  ",
+      " FFF  o..   F  ",
+      "  F   ...  FFF ",
+      "  .   ...  ... ",
+      "B...BB.o.BB.S. ",
+      "B.h.  h    ... ",
+      "B...           "
+    ],
+    "bridges": {
+      "bridge-0": [[0, 14], [1, 14], [2, 14]],
+      "bridge-1": [[2, 4], [2, 5]],
+      "bridge-2": [[2, 9], [2, 10]],
+      "bridge-3": [[7, 0], [8, 0], [9, 0]],
+      "bridge-4": [[7, 4], [7, 5]],
+      "bridge-5": [[7, 9], [7, 10]]
+    },
+    "initially_open": ["bridge-1", "bridge-3", "bridge-5"],
+    "switches": [
+      {"cell": [1, 8], "effects": {"bridge-2": "toggle"}},
+      {"cell": [4, 6], "effects": {"bridge-1": "close", "bridge-2": "close", "bridge-4": "close", "bridge-5": "close"}},
+      {"cell": [7, 7], "effects": {"bridge-1": "close", "bridge-2": "close", "bridge-4": "close", "bridge-5": "close"}},
+      {"cell": [8, 2], "effects": {"bridge-0": "open", "bridge-1": "close"}},
+      {"cell": [8, 6], "effects": {"bridge-4": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 32",
+    "passcode": "879021",
+    "rows": [
+      "            .h",
+      "  ..BB..   ...",
+      " ...BB..  .h..",
+      " .G.   .....  ",
+      " ...    ...   ",
+      "         ..   ",
+      "    ...  .S   ",
+      "..BB.h.  ..   ",
+      "..BB.......   "
+    ],
+    "bridges": {
+      "bridge-0": [[1, 4], [1, 5]],
+      "bridge-1": [[2, 4], [2, 5]],
+      "bridge-2": [[7, 2], [7, 3]],
+      "bridge-3": [[8, 2], [8, 3]]
+    },
+    "initially_open": ["bridge-0"],
+    "switches": [
+      {"cell": [0, 13], "effects": {"bridge-0": "toggle", "bridge-2": "toggle"}},
+      {"cell": [2, 11], "effects": {"bridge-3": "toggle"}},
+      {"cell": [7, 5], "effects": {"bridge-1": "toggle"}}
+    ]
+  },
+  {
+    "name": "Stage 33",
+    "passcode": "614955",
+    "rows": [
+      "     ..o...    ",
+      "     ......B   ",
+      "...  o..o..... ",
+      ".S.BB....oo..o ",
+      "     ..o..o... ",
+      "     ......o.. ",
+      "...  ......o...",
+      ".G.BB.o.  ...oh",
+      "...  ...   ....",
+      "...         ..."
+    ],
+    "bridges": {
+      "bridge-0": [[1, 11]],
+      "bridge-1": [[3, 3], [3, 4]],
+      "bridge-2": [[7, 3], [7, 4]]
+    },
+    "initially_open": ["bridge-1", "bridge-2"],
+    "switches": [
+      {"cell": [0, 7], "effects": {"bridge-2": "close"}},
+      {"cell": [2, 5], "effects": {"bridge-2": "close"}},
+      {"cell": [2, 8], "effects": {"bridge-2": "close"}},
+      {"cell": [3, 9], "effects": {"bridge-2": "close"}},
+      {"cell": [3, 10], "effects": {"bridge-2": "close"}},
+      {"cell": [3, 13], "effects": {"bridge-2": "close"}},
+      {"cell": [4, 7], "effects": {"bridge-2": "close"}},
+      {"cell": [4, 10], "effects": {"bridge-2": "close"}},
+      {"cell": [5, 11], "effects": {"bridge-2": "close"}},
+      {"cell": [6, 11], "effects": {"bridge-2": "close"}},
+      {"cell": [7, 6], "effects": {"bridge-2": "close"}},
+      {"cell": [7, 13], "effects": {"bridge-2": "close"}},
+      {"cell": [7, 14], "effects": {"bridge-0": "open"}}
+    ]
+  }
+]
