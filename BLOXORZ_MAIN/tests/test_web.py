@@ -205,6 +205,26 @@ class WebTests(unittest.TestCase):
         self.assertIsNotNone(game["transition"]["landing"])
         self.assertIn("support", game["transition"])
 
+    def test_current_level_catalog_loads_every_advertised_board(self):
+        pack = json.loads((ROOT / "levels/levels.json").read_text(encoding="utf-8"))
+        groups = json.loads((ROOT / "levels/testcases.json").read_text(encoding="utf-8"))["groups"]
+        expected = {f"stage-{i:02}": level for i, level in enumerate(pack, 1)}
+        expected.update({case["id"]: case["board"] for group in groups for case in group["cases"]})
+        game = self.request("/api/game")
+        self.assertEqual({level["id"] for level in game["levels"]}, set(expected))
+        for level, board in expected.items():
+            with self.subTest(level=level):
+                game = self.request("/api/reset", {"level": level})
+                self.assertEqual(game["level"], level)
+                self.assertEqual(game["rows"], board["rows"])
+                self.assertEqual(game["moves"], 0)
+                self.assertEqual(game["status"], "playing")
+        for removed in ("basic", "courtyard", "advanced"):
+            with self.subTest(removed=removed), self.assertRaises(urllib.error.HTTPError) as caught:
+                self.request("/api/reset", {"level": removed})
+            self.assertEqual(caught.exception.code, 400)
+            caught.exception.close()
+
     def test_testcase_runs_from_start_without_changing_session(self):
         suite = self.request("/api/testcases")
         self.assertEqual([len(group["cases"]) for group in suite["groups"]], [10] * 4 + [3])

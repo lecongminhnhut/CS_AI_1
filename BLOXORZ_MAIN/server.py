@@ -20,9 +20,6 @@ LEVELS = {f"stage-{i:02}": (level.name, f"Coolmath · {level.name}" +
                           (f" · Mã màn {level.passcode}" if level.passcode else ""))
           for i, level in enumerate(PACK, 1)}
 BOARDS = {f"stage-{i:02}": level.board for i, level in enumerate(PACK, 1)}
-LEVELS.update({"courtyard": ("Sân đá · Demo", "Tìm đường qua khu vườn lơ lửng."),
-          "basic": ("Bước đầu tiên", "Lăn sang phải hai lần để vào đích."),
-          "advanced": ("Những nhịp cầu · Demo", "Công tắc, cầu, ô dễ vỡ và hai khối con.")})
 TESTCASE_GROUPS = json.loads((ROOT / "levels/testcases.json").read_text(encoding="utf-8"))["groups"]
 TESTCASE_IDS = set()
 for group in TESTCASE_GROUPS:
@@ -44,7 +41,7 @@ class Session:
         if level not in LEVELS:
             raise ValueError("Unknown level")
         self.level = level
-        self.engine = Engine(BOARDS[level] if level in BOARDS else Board.load(ROOT / "levels" / f"{level}.json"))
+        self.engine = Engine(BOARDS[level])
         self.state = self.engine.initial_state()
         self.moves = 0
         self.status = "playing"
