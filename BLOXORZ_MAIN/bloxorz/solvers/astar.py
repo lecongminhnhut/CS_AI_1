@@ -89,10 +89,9 @@ def heuristic(engine, state, prepared=None):
 
 
 def search(engine, start, deadline):
-    """Tìm đường ít chi phí nhất; cùng chi phí thì chọn ít thao tác hơn."""
+    """Tìm đường có tổng chi phí nhỏ nhất bằng A*."""
     parents = {start: None}  # Trạng thái trước và thao tác để đi tới mỗi trạng thái.
     costs = {start: 0}       # Chi phí g tốt nhất hiện biết đc.
-    steps = {start: 0}
     if perf_counter() >= deadline:
         return finish(None, parents, costs, 0, "timeout")
     if engine.is_goal(start):
@@ -112,19 +111,19 @@ def search(engine, start, deadline):
         output.update(heuristic_states=prepared.state_count, heuristic_time_ms=preparation_ms)
         return output
 
-    # 2. Heap ưu tiên f nhỏ nhất, rồi số thao tác đã đi nhỏ nhất.
+    # 2. Heap ưu tiên f nhỏ nhất; nếu cùng f thì xét theo thứ tự đưa vào.
     h = heuristic(engine, start, prepared)
     sequence = count()
-    # Mỗi mục: (f, số thao tác, số thứ tự, g, trạng thái).
-    frontier = [(h, 0, next(sequence), 0, start)]
+    # Mỗi mục: (f, số thứ tự, g, trạng thái).
+    frontier = [(h, next(sequence), 0, start)]
     expanded = 0
     while frontier:
         if perf_counter() >= deadline:
             return result(None, expanded, "timeout")
-        _f, move_count, _order, cost, current = heappop(frontier)
+        _f, _order, cost, current = heappop(frontier)
 
         # 3. Bỏ mục heap cũ nếu đã tìm được đường tốt hơn tới trạng thái đó.
-        if (cost, move_count) != (costs[current], steps[current]):
+        if cost != costs[current]:
             continue
         if engine.is_goal(current):
             return result(current, expanded, "solved")
@@ -134,21 +133,17 @@ def search(engine, start, deadline):
             if perf_counter() >= deadline:
                 return result(None, expanded, "timeout")
             new_cost = cost + edge_cost(engine, next_state)
-            new_steps = move_count + 1
-            new_score = (new_cost, new_steps)
-            old_score = (costs.get(next_state, inf), steps.get(next_state, inf))
 
-            # So chi phí trước, số thao tác sau. Chỉ nhận đường tốt hơn.
-            if new_score >= old_score:
+            # Chỉ cập nhật nếu tìm được đường có chi phí thấp hơn.
+            if new_cost >= costs.get(next_state, inf):
                 continue
 
             costs[next_state] = new_cost
-            steps[next_state] = new_steps
             parents[next_state] = current, action
 
             h = heuristic(engine, next_state, prepared)
             f = new_cost + h
-            heappush(frontier, (f, new_steps, next(sequence), new_cost, next_state))
+            heappush(frontier, (f, next(sequence), new_cost, next_state))
 
     # Không còn trạng thái để xét -> không có lời giải.
     return result(None, expanded, "no_solution")
