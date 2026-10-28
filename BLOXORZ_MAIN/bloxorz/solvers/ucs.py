@@ -15,12 +15,12 @@ def search(engine, start, deadline=float("inf")):
 
     while frontier:
         cost, _, state = heapq.heappop(frontier)
+        if perf_counter() >= deadline:
+            return finish(None, parents, costs, expanded, "timeout")
         if state in closed or cost > costs[state]:
             continue                      
         if engine.is_goal(state):
             return finish(state, parents, costs, expanded, "solved")
-        if perf_counter() >= deadline:
-            return finish(None, parents, costs, expanded, "timeout")
 
         closed.add(state)
         expanded += 1
