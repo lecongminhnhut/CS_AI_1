@@ -5,11 +5,15 @@ import argparse
 import csv
 import json
 import multiprocessing as mp
+import math
+import platform
 from queue import Empty
 import statistics
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
@@ -71,7 +75,7 @@ def load_cases(path: Path) -> list[tuple[str, str, dict[str, Any]]]:
     return cases
 
 
-def _worker(payload: dict[str, Any], output: Any) -> None:
+def _worker(payload: dict[str, Any], output: Any, ready: Any) -> None:
 
     try:
         from bloxorz import Board, Engine
@@ -81,6 +85,7 @@ def _worker(payload: dict[str, Any], output: Any) -> None:
         board = Board.from_dict(payload["board"])
         engine = Engine(board)
         start = engine.initial_state()
+        ready.set()
         result = solve(engine, start, payload["algorithm"], seconds=payload["timeout"])
         if not isinstance(result, dict):
             raise TypeError("solve() phải trả về dict")
@@ -90,6 +95,8 @@ def _worker(payload: dict[str, Any], output: Any) -> None:
                                "expanded_nodes": result.get("expanded"),
                                "solution_length": result.get("length"), "total_cost": result.get("cost"),
                                "valid_solution": None, "error": ""}
+        if status == "timeout":
+            row["error"] = "Timeout nội bộ do solver kết thúc theo deadline"
         if status == "solved":
             actions = result.get("actions")
             if not isinstance(actions, list):
@@ -121,7 +128,25 @@ def _worker(payload: dict[str, Any], output: Any) -> None:
 
 
 def _number(value: Any) -> int | float | None:
-    return value if isinstance(value, (int, float)) and not isinstance(value, bool) else None
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return None
+    return value if math.isfinite(value) else None
+
+
+def _is_valid_solution(row: dict[str, Any]) -> bool:
+    return row.get("status") == "solved" and row.get("valid_solution") is True
+
+
+def _is_complete_run(row: dict[str, Any]) -> bool:
+    return _is_valid_solution(row) or row.get("status") == "no_solution"
+
+
+def _metric_rows(rows: list[dict[str, Any]], field: str) -> list[dict[str, Any]]:
+    if field in ("solution_length", "total_cost"):
+        eligible = [row for row in rows if _is_valid_solution(row)]
+    else:
+        eligible = [row for row in rows if _is_complete_run(row)]
+    return [row for row in eligible if _number(row.get(field)) is not None]
 
 
 def run_one(group_id: str, group_name: str, case: dict[str, Any], algorithm: str,
@@ -134,17 +159,24 @@ def run_one(group_id: str, group_name: str, case: dict[str, Any], algorithm: str
            "total_cost": None, "valid_solution": None, "error": ""}
     context = mp.get_context("spawn")
     queue = context.Queue()
+    ready = context.Event()
     process = context.Process(target=_worker, args=({"board": case.get("board"),
-        "algorithm": algorithm, "timeout": timeout}, queue))
+        "algorithm": algorithm, "timeout": timeout}, queue, ready))
     started = time.perf_counter()
+    started_process = False
     try:
         process.start()
+        started_process = True
         process.join(timeout)
         if process.is_alive():
             process.terminate()
-            process.join()
+            process.join(1)
+            if process.is_alive():
+                process.kill()
+                process.join()
+            phase = "sau khi worker khởi tạo" if ready.is_set() else "trước khi worker khởi tạo xong"
             row.update(status="timeout", search_time_ms=round((time.perf_counter() - started) * 1000, 3),
-                       error=f"Vượt timeout {timeout:g}s; tiến trình đã dừng")
+                       error=f"Timeout ngoài ({phase}), vượt {timeout:g}s; tiến trình đã dừng")
         else:
             try:
                 result = queue.get(timeout=1)
@@ -159,6 +191,11 @@ def run_one(group_id: str, group_name: str, case: dict[str, Any], algorithm: str
     except Exception as exc:
         row["error"] = f"{type(exc).__name__}: {exc}"
     finally:
+        if started_process and process.is_alive():
+            process.terminate()
+            process.join(1)
+        ready.set()
+        queue.cancel_join_thread()
         queue.close()
     return row
 
@@ -170,12 +207,11 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                            str(row["algorithm"])), []).append(row)
     summaries = []
     for (group_id, group_name, algorithm), items in sorted(groups.items()):
-        solved = [item for item in items if item.get("status") == "solved"
-                  and item.get("valid_solution") is True]
         def median(field: str) -> float | None:
-            values = [float(v) for item in solved if (v := _number(item.get(field))) is not None]
+            values = [float(item[field]) for item in _metric_rows(items, field)]
             return round(statistics.median(values), 3) if values else None
-        times = [float(v) for item in solved if (v := _number(item.get("search_time_ms"))) is not None]
+        solved = [item for item in items if _is_valid_solution(item)]
+        times = [float(item["search_time_ms"]) for item in _metric_rows(items, "search_time_ms")]
         total = len(items)
         statuses = [item.get("status") for item in items]
         summaries.append({"group_id": group_id, "group_name": group_name,
@@ -212,10 +248,9 @@ def write_plots(rows: list[dict[str, Any]], output: Path) -> None:
         for algorithm in algorithms:
             values = []
             for group_id in groups:
-                observed = [float(value) for row in rows if row.get("group_id") == group_id
-                            and row.get("algorithm") == algorithm and row.get("status") == "solved"
-                            and row.get("valid_solution") is True
-                            and (value := _number(row.get(field))) is not None]
+                observed = [float(row[field]) for row in _metric_rows(
+                    [row for row in rows if row.get("group_id") == group_id
+                     and row.get("algorithm") == algorithm], field)]
                 values.append(statistics.median(observed) if observed else float("nan"))
             series[algorithm.upper()] = values
         if not groups or not algorithms or not any(any(v == v for v in values) for values in series.values()):
@@ -243,12 +278,12 @@ def main(argv: list[str] | None = None) -> int:
         cases = load_cases(args.testcases)
         requested = {value.strip() for value in args.cases.split(",") if value.strip()}
         if requested:
+            available = {str(item[2]["id"]) for item in cases}
+            missing = requested - available
+            if missing:
+                print("ID testcase không tồn tại: " + ", ".join(sorted(missing)), file=sys.stderr)
+                return 2
             cases = [item for item in cases if str(item[2]["id"]) in requested]
-            found = {str(item[2]["id"]) for item in cases}
-            if requested - found:
-                print("ID không tồn tại: " + ", ".join(sorted(requested - found)), file=sys.stderr)
-            if not cases:
-                raise ValueError("Không khớp testcase nào")
     except Exception as exc:
         print(f"Không đọc được testcase: {exc}", file=sys.stderr)
         return 2
@@ -265,12 +300,24 @@ def main(argv: list[str] | None = None) -> int:
     summary = summarize(raw)
     write_csv(args.output / "benchmark_raw.csv", raw, RAW_FIELDS)
     write_csv(args.output / "benchmark_summary.csv", summary, SUMMARY_FIELDS)
+    try:
+        matplotlib_version = version("matplotlib")
+    except PackageNotFoundError:
+        matplotlib_version = None
+    try:
+        git_hash = subprocess.run(["git", "rev-parse", "HEAD"], cwd=PROJECT_ROOT,
+                                  capture_output=True, text=True, check=True,
+                                  timeout=2).stdout.strip() or None
+    except (OSError, subprocess.SubprocessError):
+        git_hash = None
     metadata = {"generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                 "testcases_file": str(args.testcases.resolve()), "case_count": len(cases),
                 "algorithms": list(ALGORITHMS), "repeat": args.repeat, "timeout_seconds": args.timeout,
                 "python_version": sys.version, "python_executable": sys.executable,
+                "operating_system": platform.platform(), "matplotlib_version": matplotlib_version,
+                "git_commit": git_hash,
                 "groups": sorted({group_id for group_id, _, _ in cases}),
-                "note": "Chỉ tổng hợp hiệu năng của lời giải đã phát lại hợp lệ; peak memory là tracemalloc của solver."}
+                "note": "Metric hiệu năng gồm solved hợp lệ và no_solution hoàn tất; metric lời giải chỉ gồm solved hợp lệ. peak memory là tracemalloc của solver."}
     with (args.output / "benchmark_results.json").open("w", encoding="utf-8") as stream:
         json.dump({"metadata": metadata, "raw_results": raw, "summary": summary}, stream, ensure_ascii=False, indent=2)
     if not args.no_plots:
