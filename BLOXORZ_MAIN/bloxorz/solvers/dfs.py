@@ -1,52 +1,35 @@
-
-"""Depth-First Search (DFS) solver for Bloxorz."""
-
-import math
-import time
-
+from time import perf_counter
 from .common import edge_cost, finish
 
 
-def search(engine, start, deadline=None):
-    stack = [start]
-
-    visited = {start}
-
+def search(engine, start, deadline=float("inf")):
+    frontier = [start]
     parents = {start: None}
-
     costs = {start: 0}
-
+    closed = set()
     expanded = 0
 
-    while stack:
-        if deadline is not None and time.monotonic() >= deadline:
-            return finish(
-                None, parents, costs, expanded, "timeout"
-            )
-
-        state = stack.pop()
-
+    while frontier:
+        state = frontier.pop()
+        
+        if state in closed:
+            continue
+            
         if engine.is_goal(state):
-            return finish(
-                state, parents, costs, expanded, "solved"
-            )
+            return finish(state, parents, costs, expanded, "solved")
+            
+        if perf_counter() >= deadline:
+            return finish(None, parents, costs, expanded, "timeout")
 
+        closed.add(state)
         expanded += 1
-
-        for action, next_state in engine.successors(state):
-            if next_state in visited:
+        
+        for action, child in engine.successors(state):
+            if child in closed:
                 continue
+                
+            costs[child] = costs[state] + edge_cost(engine, child)
+            parents[child] = (state, action)
+            frontier.append(child)
 
-            visited.add(next_state)
-
-            parents[next_state] = (state, action)
-
-            costs[next_state] = (
-                costs[state] + edge_cost(engine, next_state)
-            )
-
-            stack.append(next_state)
-
-    return finish(
-        None, parents, costs, expanded, "no_solution"
-    )
+    return finish(None, parents, costs, expanded, "no_solution")
