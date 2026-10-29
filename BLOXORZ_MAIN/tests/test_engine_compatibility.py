@@ -1,14 +1,12 @@
-"""So sánh với hành vi engine trước khi tách file, gồm cả sự kiện animation."""
-
 import hashlib
 import json
+import tempfile
 import unittest
 from collections import deque
 from dataclasses import asdict
 from pathlib import Path
 
 from bloxorz import Action, Board, Engine, State, Switch
-from bloxorz.levels import load_levels
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -34,12 +32,11 @@ def transition_digest(board):
 
 
 class CompatibilityTests(unittest.TestCase):
-    def test_transitions_and_animation_events_match_previous_engine(self):
+    def test_transitions_and_animation_events_match_reference(self):
         reference = json.loads((ROOT / "tests/engine_transition_reference.json").read_text())
-        boards = {f"stage-{i:02}": level.board
-                  for i, level in enumerate(load_levels(ROOT / "levels/levels.json"), 1)}
-        boards.update({name: Board.load(ROOT / f"levels/{name}.json")
-                       for name in ("basic", "courtyard", "advanced")})
+        suite = json.loads((ROOT / "levels/testcases.json").read_text(encoding="utf-8"))
+        boards = {case["id"]: Board.from_dict(case["board"])
+                  for group in suite["groups"] for case in group["cases"]}
         self.assertEqual(set(boards), set(reference))
         for name, board in boards.items():
             with self.subTest(level=name):
@@ -54,9 +51,12 @@ class CompatibilityTests(unittest.TestCase):
         self.assertIs(engine.Board, BoardData)
         self.assertIs(engine.State, StateData)
         self.assertIs(engine.Switch, Switch)
-        path = ROOT / "levels/advanced.json"
-        expected = Board.load(path)
-        self.assertEqual(load_board(path), expected)
-        data = json.loads(path.read_text())
+        suite = json.loads((ROOT / "levels/testcases.json").read_text(encoding="utf-8"))
+        data = suite["groups"][2]["cases"][0]["board"]
+        expected = Board.from_dict(data)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "level.json"
+            path.write_text(json.dumps(data), encoding="utf-8")
+            self.assertEqual(Board.load(path), expected)
+            self.assertEqual(load_board(path), expected)
         self.assertEqual(parse_board(data), expected)
-        self.assertEqual(Board.from_dict(data), expected)

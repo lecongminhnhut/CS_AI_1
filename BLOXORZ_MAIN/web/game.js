@@ -4,6 +4,7 @@ import { fallPlan, createFallMotion } from './motion.js';
 import { nextLevel, adjacentLevel } from './progression.js?v=skeleton02';
 import { renderTileLegend } from './legend.js?v=wild-grass2';
 import { initTestcases } from './testcases.js';
+import { countRolls, replayNextRoll } from './replay.js';
 
 const $ = selector => document.querySelector(selector);
 const viewport = $('#viewport');
@@ -174,9 +175,11 @@ function updateUI() {
   $('#replay').disabled = $('#step-replay').disabled = busy || replaying || !hasNextStep;
   $('#replay').hidden = replaying;
   $('#replay-progress').hidden = !path;
-  $('#replay-count').textContent = `${replayIndex} / ${path?.length ?? 0}`;
-  $('#replay-bar').max = path?.length || 1;
-  $('#replay-bar').value = replayIndex;
+  const totalRolls = countRolls(path ?? []);
+  const completedRolls = countRolls(path ?? [], replayIndex);
+  $('#replay-count').textContent = `${completedRolls} / ${totalRolls}`;
+  $('#replay-bar').max = totalRolls || 1;
+  $('#replay-bar').value = completedRolls;
   $('#stop-replay').hidden = !replaying;
   $('#stop-replay').disabled = stopRequested;
   $('#stop-replay').textContent = stopRequested ? 'Đang dừng…' : '■ Dừng lời giải';
@@ -448,9 +451,10 @@ $('#replay').onclick = async () => {
   try {
     while (path && replayIndex < path.length) {
       if (stopRequested || game.status !== 'playing') break;
-      if (!await move(path[replayIndex], true)) break;
-      replayIndex += 1;
+      const result = await replayNextRoll(path, replayIndex, action => move(action, true));
+      replayIndex = result.index;
       updateUI();
+      if (!result.moved) break;
     }
   } finally {
     if (stopRequested && game.status === 'playing') game.message = 'Đã dừng lời giải. Nhấn Phát lại để tiếp tục hoặc tự điều khiển khối.';
@@ -464,8 +468,16 @@ $('#stop-replay').onclick = () => {
 };
 $('#step-replay').onclick = async () => {
   if (!path || busy || replaying || replayIndex >= path.length || game.status !== 'playing') return;
-  if (await move(path[replayIndex], true)) replayIndex += 1;
+  stopRequested = false;
+  replaying = true;
   updateUI();
+  try {
+    const result = await replayNextRoll(path, replayIndex, action => move(action, true));
+    replayIndex = result.index;
+  } finally {
+    replaying = false;
+    updateUI();
+  }
 };
 
 const raycaster = new THREE.Raycaster();

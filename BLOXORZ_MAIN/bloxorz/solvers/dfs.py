@@ -1,5 +1,5 @@
 from time import perf_counter
-from .common import edge_cost, finish
+from .common import edge_cost, finish, search_successors
 
 
 def search(engine, start, deadline=float("inf")):
@@ -10,26 +10,27 @@ def search(engine, start, deadline=float("inf")):
     expanded = 0
 
     while frontier:
-        state = frontier.pop()
-        
-        if state in closed:
-            continue
-            
-        if engine.is_goal(state):
-            return finish(state, parents, costs, expanded, "solved")
-            
         if perf_counter() >= deadline:
             return finish(None, parents, costs, expanded, "timeout")
+        state = frontier.pop()
+
+        if state in closed:
+            continue
+
+        if engine.is_goal(state):
+            return finish(state, parents, costs, expanded, "solved")
 
         closed.add(state)
         expanded += 1
-        
-        for action, child in engine.successors(state):
+
+        for actions, child in search_successors(engine, state):
+            if perf_counter() >= deadline:
+                return finish(None, parents, costs, expanded, "timeout")
             if child in closed:
                 continue
-                
+
             costs[child] = costs[state] + edge_cost(engine, child)
-            parents[child] = (state, action)
+            parents[child] = (state, actions)
             frontier.append(child)
 
     return finish(None, parents, costs, expanded, "no_solution")

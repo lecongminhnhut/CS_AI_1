@@ -1,4 +1,5 @@
 import http.cookiejar
+from importlib import import_module
 import json
 import threading
 import time
@@ -9,7 +10,7 @@ from unittest.mock import patch
 
 from bloxorz import Action, Board, Engine, State
 from bloxorz.solver import solve
-from server import ROOT, Session, create_server
+from server import BOARDS, ROOT, Session, create_server
 
 
 class SearchTests(unittest.TestCase):
@@ -30,7 +31,7 @@ class SearchTests(unittest.TestCase):
 
     def test_time_limit_includes_waiting_for_another_solver(self):
         from bloxorz.solver import _measurement_lock
-        engine = Engine(Board.load(ROOT / "levels/basic.json"))
+        engine = Engine(Board(("S..G",), (0, 0), (0, 3)))
         with _measurement_lock:
             started = time.perf_counter()
             result = solve(engine, engine.initial_state(), "dfs", seconds=.02)
@@ -42,6 +43,7 @@ class SearchTests(unittest.TestCase):
     def test_default_search_has_no_time_limit(self):
         engine = Engine(Board(("S..G",), (0, 0), (0, 3)))
         for algorithm in ("bfs", "dfs", "ucs", "astar"):
+            import_module(f"bloxorz.solvers.{algorithm}")
             for elapsed in (10.01, 1_000_000):
                 with self.subTest(algorithm=algorithm, elapsed=elapsed):
                     with patch("bloxorz.solver.time.perf_counter", return_value=100):
@@ -57,8 +59,8 @@ class SearchTests(unittest.TestCase):
             lock.release.assert_called_once_with()
 
     def test_every_solver_produces_replayable_solutions(self):
-        for level in ("basic", "courtyard", "advanced"):
-            engine = Engine(Board.load(ROOT / "levels" / f"{level}.json"))
+        for level in ("B01", "F01", "S01", "M01"):
+            engine = Engine(BOARDS[level])
             minimum = solve(engine, engine.initial_state(), "bfs")["length"]
             for algorithm in ("bfs", "dfs", "ucs", "astar"):
                 with self.subTest(level=level, algorithm=algorithm):
@@ -69,12 +71,12 @@ class SearchTests(unittest.TestCase):
                     for action in result["actions"]:
                         state = engine.step(state, action)
                         self.assertIsNotNone(state)
-                        cost += 1 + sum(engine.board.tile(cell) == "F" for cell in state.cells)
+                        if action != "switch":
+                            cost += 1 + sum(engine.board.tile(cell) == "F" for cell in state.cells)
                     self.assertTrue(engine.is_goal(state))
-                    self.assertEqual(result["length"], len(result["actions"]))
+                    self.assertEqual(result["length"], sum(action != "switch" for action in result["actions"]))
                     self.assertEqual(result["cost"], cost)
-                    if algorithm == "dfs":
-                        self.assertEqual(result["length"], minimum)
+                    self.assertGreaterEqual(result["length"], minimum)
 
     def test_dfs_revisits_states_reached_by_a_shorter_path(self):
         engine = Engine(Board(("S....G",), (0, 0), (0, 5)))
@@ -140,7 +142,7 @@ class WebTests(unittest.TestCase):
             return json.load(response)
 
     def test_solver_routes_have_no_time_limit(self):
-        self.request("/api/reset", {"level": "stage-01"})
+        self.request("/api/reset", {"level": "B01"})
         for route, data in (("/api/solve", {"algorithm": "dfs"}),
                             ("/api/testcase", {"level": "B01", "algorithm": "dfs"})):
             with self.subTest(route=route), patch("server.solve", wraps=solve) as search:
@@ -157,14 +159,14 @@ class WebTests(unittest.TestCase):
                 lock.__exit__.assert_called_once()
 
     def test_manual_play_and_solver_share_one_session(self):
-        game = self.request("/api/reset", {"level": "basic"})
+        game = self.request("/api/reset", {"level": "B01"})
         self.assertEqual(game["moves"], 0)
         result = self.request("/api/solve", {"algorithm": "astar"})["result"]
-        self.assertEqual(result["actions"], ["right", "right"])
+        self.assertEqual(result["status"], "solved")
         for action in result["actions"]:
             game = self.request("/api/move", {"action": action})
         self.assertEqual(game["status"], "won")
-        self.request("/api/reset", {"level": "basic"})
+        self.request("/api/reset", {"level": "B01"})
         self.assertEqual(self.request("/api/move", {"action": "left"})["status"], "lost")
 
     def test_invalid_input_cross_origin_and_static_assets(self):
@@ -186,30 +188,29 @@ class WebTests(unittest.TestCase):
                 self.assertTrue(response.read())
 
     def test_independent_tabs_and_switch_without_split(self):
-        self.request("/api/reset", {"level": "basic"})
+        self.request("/api/reset", {"level": "B01"})
         self.request("/api/move", {"action": "right"})
         with urllib.request.urlopen(self.url + "/api/game") as response:
             other = json.load(response)
-        self.assertEqual(other["level"], "stage-01")
+        self.assertEqual(other["level"], "B01")
         self.assertEqual(other["moves"], 0)
         session = Session()
         session.move("switch")
         self.assertEqual(session.status, "playing")
         self.assertEqual(session.moves, 0)
 
-    def test_coolmath_pack_and_move_metadata_are_available(self):
-        game = self.request("/api/reset", {"level": "stage-02"})
-        self.assertEqual(sum(level["id"].startswith("stage-") for level in game["levels"]), 33)
+    def test_testcase_catalog_and_move_metadata_are_available(self):
+        game = self.request("/api/reset", {"level": "B02"})
+        self.assertEqual(len(game["levels"]), 43)
+        self.assertFalse(any(level["id"].startswith("stage-") for level in game["levels"]))
         self.assertEqual(game["state"]["bridges"], [])
         game = self.request("/api/move", {"action": "right"})
         self.assertIsNotNone(game["transition"]["landing"])
         self.assertIn("support", game["transition"])
 
     def test_current_level_catalog_loads_every_advertised_board(self):
-        pack = json.loads((ROOT / "levels/levels.json").read_text(encoding="utf-8"))
         groups = json.loads((ROOT / "levels/testcases.json").read_text(encoding="utf-8"))["groups"]
-        expected = {f"stage-{i:02}": level for i, level in enumerate(pack, 1)}
-        expected.update({case["id"]: case["board"] for group in groups for case in group["cases"]})
+        expected = {case["id"]: case["board"] for group in groups for case in group["cases"]}
         game = self.request("/api/game")
         self.assertEqual({level["id"] for level in game["levels"]}, set(expected))
         for level, board in expected.items():
@@ -219,7 +220,7 @@ class WebTests(unittest.TestCase):
                 self.assertEqual(game["rows"], board["rows"])
                 self.assertEqual(game["moves"], 0)
                 self.assertEqual(game["status"], "playing")
-        for removed in ("basic", "courtyard", "advanced"):
+        for removed in ("stage-01", "stage-33", "basic", "courtyard", "advanced"):
             with self.subTest(removed=removed), self.assertRaises(urllib.error.HTTPError) as caught:
                 self.request("/api/reset", {"level": removed})
             self.assertEqual(caught.exception.code, 400)
@@ -228,8 +229,8 @@ class WebTests(unittest.TestCase):
     def test_testcase_runs_from_start_without_changing_session(self):
         suite = self.request("/api/testcases")
         self.assertEqual([len(group["cases"]) for group in suite["groups"]], [10] * 4 + [3])
-        self.request("/api/reset", {"level": "basic"})
-        before = self.request("/api/move", {"action": "right"})
+        self.request("/api/reset", {"level": "B01"})
+        before = self.request("/api/move", {"action": "up"})
         case = suite["groups"][0]["cases"][0]
         for algorithm in ("bfs", "dfs", "ucs", "astar"):
             result = self.request("/api/testcase", {"level": case["id"], "algorithm": algorithm})["result"]

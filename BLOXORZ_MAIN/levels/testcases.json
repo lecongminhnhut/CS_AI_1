@@ -5,7 +5,7 @@
     {
       "id": "basic",
       "name": "01 · Cơ bản",
-      "description": "Chỉ sàn thường và ô trống; lời giải ngắn nhất 4–8 thao tác.",
+      "description": "Chỉ sàn thường và ô trống; lời giải ngắn nhất 4–8 lần lăn.",
       "cases": [
         {
           "id": "B01",
@@ -144,7 +144,7 @@
     {
       "id": "fragile",
       "name": "02 · Sàn dễ vỡ",
-      "description": "Phải đi qua ô dễ vỡ ở tư thế phù hợp; lời giải ngắn nhất 9–14 thao tác.",
+      "description": "Phải đi qua ô dễ vỡ ở tư thế phù hợp; lời giải ngắn nhất 9–13 lần lăn.",
       "cases": [
         {
           "id": "F01",
@@ -292,7 +292,7 @@
     {
       "id": "switches",
       "name": "03 · Công tắc và cầu",
-      "description": "Phối hợp công tắc mềm/nặng, cầu toggle/open; lời giải ngắn nhất 15–22 thao tác.",
+      "description": "Phối hợp công tắc mềm/nặng, cầu toggle/open; lời giải ngắn nhất 15–17 lần lăn.",
       "cases": [
         {
           "id": "S01",
@@ -788,7 +788,7 @@
     {
       "id": "combined",
       "name": "04 · Kết hợp",
-      "description": "Tách/đổi điều khiển/ghép khối, ô dễ vỡ và công tắc/cầu; từ 23 thao tác.",
+      "description": "Tách/đổi điều khiển/ghép khối, ô dễ vỡ và công tắc/cầu; lời giải ngắn nhất 28–37 lần lăn, không tính đổi khối.",
       "cases": [
         {
           "id": "M01",

@@ -1,8 +1,6 @@
 import json
-import hashlib
 import tempfile
 import unittest
-from dataclasses import asdict
 from pathlib import Path
 
 from bloxorz import Action, Board, Engine, State, Switch
@@ -11,41 +9,38 @@ from bloxorz.solver import solve
 from server import ROOT
 
 
-class CoolmathTests(unittest.TestCase):
-    def test_all_grids_keep_their_coordinates(self):
-        pack = load_levels(ROOT / "levels/levels.json")
-        source = json.loads((ROOT / "levels/levels.json").read_text())
-        self.assertEqual(len(pack), 33)
-        for level, stage in zip(pack, source):
-            board = level.board
-            self.assertEqual(level.name, stage["name"])
-            self.assertEqual(level.passcode, stage["passcode"])
-            self.assertEqual(board, Board.from_dict({k: v for k, v in stage.items() if k not in ("name", "passcode")}))
-            self.assertEqual(len(board.rows), len(stage["rows"]))
-            for r, row in enumerate(stage["rows"]):
-                for c, tile in enumerate(row):
-                    self.assertEqual(board.tile((r, c)), tile)
-            self.assertEqual(board.initially_open, set(stage.get("initially_open", [])))
-            for definition in stage.get("switches", []):
-                switch = next(s for s in board.switches if s.cell == tuple(definition["cell"]))
-                self.assertEqual(dict(switch.effects), definition.get("effects", {}))
-                self.assertEqual(switch.destinations, tuple(map(tuple, definition.get("destinations", []))))
-                self.assertEqual(switch.active_destination, definition.get("active", 0))
+class LevelTests(unittest.TestCase):
+    def setUp(self):
+        suite = json.loads((ROOT / "levels/testcases.json").read_text(encoding="utf-8"))
+        self.cases = [case for group in suite["groups"] for case in group["cases"]]
 
-    def test_migration_preserves_original_33_boards(self):
-        # Fingerprint captured from engine boards before converting the supplied pack.
-        def plain(value):
-            if isinstance(value, dict):
-                return {key: plain(item) for key, item in value.items()}
-            if isinstance(value, (tuple, list)):
-                return [plain(item) for item in value]
-            if isinstance(value, frozenset):
-                return sorted(value)
-            return value
-        boards = [plain(asdict(level.board)) for level in load_levels(ROOT / "levels/levels.json")]
-        serialized = json.dumps(boards, sort_keys=True, separators=(",", ":"))
-        self.assertEqual(hashlib.sha256(serialized.encode()).hexdigest(),
-                         "c83e344d235a53bfce8deb08f33efdf09a3cebcaeef9661e160d85c1509f2cdf")
+    def test_all_testcase_grids_keep_their_coordinates(self):
+        self.assertEqual(len(self.cases), 43)
+        for case in self.cases:
+            with self.subTest(case=case["id"]):
+                source = case["board"]
+                board = Board.from_dict(source)
+                self.assertEqual(board.rows, tuple(source["rows"]))
+                for r, row in enumerate(source["rows"]):
+                    for c, tile in enumerate(row):
+                        self.assertEqual(board.tile((r, c)), tile)
+                self.assertEqual(board.initially_open, set(source.get("initially_open", [])))
+                for definition in source.get("switches", []):
+                    switch = next(s for s in board.switches if s.cell == tuple(definition["cell"]))
+                    self.assertEqual(dict(switch.effects), definition.get("effects", {}))
+                    self.assertEqual(switch.destinations, tuple(map(tuple, definition.get("destinations", []))))
+                    self.assertEqual(switch.active_destination, definition.get("active", 0))
+
+    def test_pack_loader_accepts_testcase_boards(self):
+        data = [{"name": case["name"], **case["board"]} for case in self.cases]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "pack.json"
+            path.write_text(json.dumps(data), encoding="utf-8")
+            levels = load_levels(path)
+        self.assertEqual(len(levels), len(self.cases))
+        for level, case in zip(levels, self.cases):
+            self.assertEqual(level.name, case["name"])
+            self.assertEqual(level.board, Board.from_dict(case["board"]))
 
     def test_pack_validation_and_optional_metadata(self):
         invalid = [[], {}, [None], [{"rows": ["S..G"]}],
@@ -64,10 +59,10 @@ class CoolmathTests(unittest.TestCase):
             self.assertEqual(level.passcode, "")
             self.assertEqual(level.board, Board(("S..G",), (0, 0), (0, 3)))
 
-    def test_initial_stages_have_replayable_solutions(self):
-        for level in load_levels(ROOT / "levels/levels.json")[:9]:
-            with self.subTest(stage=level.name):
-                engine = Engine(level.board)
+    def test_initial_testcases_have_replayable_solutions(self):
+        for case in self.cases[:9]:
+            with self.subTest(case=case["id"]):
+                engine = Engine(Board.from_dict(case["board"]))
                 result = solve(engine, engine.initial_state(), "bfs")
                 self.assertEqual(result["status"], "solved")
                 state = engine.initial_state()

@@ -85,7 +85,7 @@ Chạy từ thư mục gốc dự án:
 ```python
 from bloxorz import Board, Engine
 
-engine = Engine(Board.load("levels/basic.json"))
+engine = Engine(Board.from_dict({"rows": ["S..G"]}))
 state = engine.initial_state()
 for action in ("right", "right"):
     next_state = engine.step(state, action)
@@ -98,30 +98,26 @@ GUI giữ `state` hiện tại, gọi `step` theo phím mũi tên; phím cách g
 
 ## Định dạng màn
 
-Game nạp 33 màn từ `levels/levels.json`, kèm 3 màn demo. Pack là một danh sách màn; mỗi màn dùng cùng cấu trúc bàn chơi với `basic.json`, `courtyard.json` và `advanced.json`. `load_levels()` trong `bloxorz/levels.py` đọc tên/mã màn, rồi gọi `parse_board()`; `Board.load()` và `Board.from_dict()` cũng chuyển đến đúng bộ đọc này. Engine, game và cả bốn solver dùng chung đối tượng `Board`, không chuyển đổi ký hiệu lần nữa.
+Game chỉ nạp 43 màn tự thiết kế từ `levels/testcases.json`. File có danh sách `groups`; mỗi nhóm có danh sách `cases`, mỗi testcase gồm `id`, `name` và `board`. Danh sách chọn màn chỉ hiển thị các testcase này, mặc định mở B01. `Board.from_dict()` chuyển trường `board` đến `parse_board()`; engine, game và cả bốn solver dùng chung đối tượng `Board`. Ví dụ cấu hình `board`:
 
 ```json
-[
-  {
-    "name": "Ví dụ",
-    "passcode": "123456",
-    "rows": [
-      "S..oBB.G",
-      "...F....",
-      "..h.x...",
-      "........"
-    ],
-    "bridges": {"gate": [[0, 4], [0, 5]]},
-    "switches": [
-      {"cell": [0, 3], "effects": {"gate": "toggle"}},
-      {"cell": [2, 2], "effects": {"gate": "open"}},
-      {"cell": [2, 4], "destinations": [[3, 1], [3, 6]]}
-    ]
-  }
-]
+{
+  "rows": [
+    "S..oBB.G",
+    "...F....",
+    "..h.x...",
+    "........"
+  ],
+  "bridges": {"gate": [[0, 4], [0, 5]]},
+  "switches": [
+    {"cell": [0, 3], "effects": {"gate": "toggle"}},
+    {"cell": [2, 2], "effects": {"gate": "open"}},
+    {"cell": [2, 4], "destinations": [[3, 1], [3, 6]]}
+  ]
+}
 ```
 
-`name` bắt buộc trong pack; `passcode` tùy chọn và phải là chuỗi để giữ số 0 ở đầu. File màn riêng chỉ chứa cấu hình bàn chơi, không có tên/mã hoặc dấu ngoặc danh sách bên ngoài. Các trường tùy chọn được bỏ nếu không dùng, không cần khai báo mảng rỗng.
+`id` định danh testcase và được dùng khi chọn màn hoặc chạy benchmark; `name` là tên hiển thị. Trường `board` chỉ chứa cấu hình bàn chơi. Các trường cấu hình tùy chọn được bỏ nếu không dùng.
 
 | Ký hiệu trong `rows` | Ý nghĩa |
 |---|---|
@@ -139,7 +135,7 @@ Hàng phải cùng chiều dài, kể cả khoảng trắng ở cuối. Tọa đ
 
 Mỗi ô `o`, `h`, `x` cần một mục `switches` có `cell`; loại công tắc được suy ra từ ký hiệu trên sơ đồ, không khai báo `kind` lặp lại. Công tắc mềm/nặng dùng `effects`, ví dụ `{"gate": "open", "exit": "close"}`; các tác động hợp lệ là `toggle`, `open`, `close`. Thứ tự công tắc được giữ nguyên. Công tắc tách dùng `destinations` chứa đúng hai điểm đến và `active` bằng 0 hoặc 1 (mặc định 0) để chọn khối con theo thứ tự điểm đến. Không còn mảng `teleports` riêng hoặc các chỉ số cầu khó đọc.
 
-Bộ đọc từ chối trường lạ, ký hiệu không hợp lệ, tọa độ ngoài bản đồ, nhóm cầu không tồn tại và cấu hình thiếu công tắc. 33 sơ đồ, trạng thái cầu ban đầu, tác động công tắc, thứ tự điểm đến và khối con được chọn đều được giữ nguyên so với pack gốc. Định dạng Coolmath cũ (`grid`, `H`, `-`, `O`, `X`, `T`, `swap/on/off`) đã được chuyển sang định dạng trên; bộ đọc chỉ nhận một định dạng thống nhất.
+Bộ đọc từ chối trường lạ, ký hiệu không hợp lệ, tọa độ ngoài bản đồ, nhóm cầu không tồn tại và cấu hình thiếu công tắc. Cả 43 testcase sử dụng cùng định dạng bàn chơi.
 
 ## Phong cách và chuyển động
 
@@ -160,13 +156,13 @@ File `levels/testcases.json` chứa **43 màn tự thiết kế**: bốn nhóm c
 
 | Nhóm | Ca | Mục tiêu |
 |---|---|---|
-| Cơ bản | B01–B10 | Sàn thường/ô trống; lời giải ngắn nhất 4–8 thao tác |
-| Sàn dễ vỡ | F01–F10 | Đi qua ô dễ vỡ đúng tư thế; 9–14 thao tác |
-| Công tắc/cầu | S01–S10 | Phối hợp công tắc mềm/nặng, cầu toggle/open; 15–22 thao tác |
-| Kết hợp | M01–M10 | Tách/ghép, sàn yếu, công tắc và cầu; từ 23 thao tác |
+| Cơ bản | B01–B10 | Sàn thường/ô trống; lời giải ngắn nhất 4–8 lần lăn |
+| Sàn dễ vỡ | F01–F10 | Đi qua ô dễ vỡ đúng tư thế; 9–13 lần lăn |
+| Công tắc/cầu | S01–S10 | Phối hợp công tắc mềm/nặng, cầu toggle/open; 15–17 lần lăn |
+| Kết hợp | M01–M10 | Tách/ghép, sàn yếu, công tắc và cầu; 28–37 lần lăn |
 | Không có đường đi | N01–N03 | Đích tách rời; ô dễ vỡ chặn điểm đứng bắt buộc; cầu đóng với công tắc ở phía bên kia |
 
-Mỗi `board` dùng định dạng hiện có của game. Bốn nhóm có lời giải được sắp theo số thao tác tối thiểu trong từng nhóm; độ khó tăng theo độ dài lời giải và cơ chế, không bảo đảm thời gian mọi thuật toán tăng theo nhóm. Nhóm vô nghiệm kiểm tra thuật toán duyệt hết trạng thái và trả `no_solution`; số bước và chi phí để trống khi xuất kết quả.
+Mỗi `board` dùng định dạng hiện có của game. Độ dài lời giải chỉ tính các lần lăn lên, xuống, trái, phải. Đổi khối bằng Space hoặc click không tăng số nước đi và không cộng chi phí. Solver dùng `search_successors()` trong `bloxorz/solvers/common.py` để gộp chọn khối với một lần lăn, dựa trên `Engine.successors()`. Chuỗi phát lại vẫn giữ `switch` khi cần. Các nhóm tăng dần về cơ chế và khoảng độ dài; các ca trong một nhóm không nhất thiết được sắp theo số lần lăn. Thời gian chạy không nhất thiết tăng theo nhóm. Nhóm vô nghiệm kiểm tra thuật toán duyệt hết trạng thái và trả `no_solution`; số bước và chi phí để trống khi xuất kết quả.
 
 Trong **Danh sách testcase** dưới bàn chơi, chọn một hoặc nhiều thuật toán (BFS, DFS/IDS, UCS, A*), chọn nhóm và đánh dấu các màn cần chạy. **Mở màn** cho phép chơi thử. **Chạy danh sách** chỉ chạy các thuật toán đã chọn từ trạng thái đầu của mỗi màn, không thay đổi ván đang chơi; mỗi lượt không giới hạn thời gian. Phải chọn ít nhất một thuật toán và một màn; lựa chọn được khóa trong lúc chạy. Dừng danh sách sẽ đợi thuật toán hiện tại hoàn tất rồi không chạy các lượt tiếp theo. Bảng ghi trạng thái, thời gian, bộ nhớ đỉnh, node mở rộng, số bước và chi phí. **Xuất CSV/JSON** xuất cả kết quả timeout/vô nghiệm và chuỗi hành động; giữ nguyên ô trống cho số liệu không có. Kết quả chỉ giữ trong phiên trang, lần chạy mới thay bảng cũ; xuất trước khi chạy lại hoặc tải lại trang.
 
@@ -179,8 +175,8 @@ node tests/victory.test.mjs
 node tests/testcases.test.mjs
 ```
 
-Kiểm thử tương thích còn đối chiếu trạng thái và sự kiện animation với engine trước khi tách file trên tối đa 300 trạng thái có thể đến ở mỗi màn, cho cả 36 màn. Bao phủ 12 phép lăn và phép đảo, biên/void, thắng, ô dễ vỡ, cầu đóng/mở, công tắc mềm/nặng, hiệu ứng cố định, tách/đổi điều khiển/ghép, công tắc tại điểm dịch chuyển và dữ liệu màn không hợp lệ.
+Kiểm thử tương thích đối chiếu trạng thái và sự kiện animation với bản tham chiếu của 43 testcase, trên tối đa 300 trạng thái có thể đến ở mỗi màn. Bao phủ 12 phép lăn và phép đảo, biên/void, thắng, ô dễ vỡ, cầu đóng/mở, công tắc mềm/nặng, hiệu ứng cố định, tách/đổi điều khiển/ghép, công tắc tại điểm dịch chuyển và dữ liệu màn không hợp lệ.
 
-Kiểm thử web còn chạy cả bốn solver trên cả ba màn demo, phát lại kết quả bằng engine, đối chiếu chi phí UCS/A*, timeout, màn vô nghiệm, API chơi thắng/thua, phiên độc lập, input sai và chặn POST từ origin khác. Kiểm thử pack đối chiếu dấu vân tay dữ liệu engine của cả 33 màn trước/sau chuyển đổi, từng ô, trạng thái cầu ban đầu, khối tách đang chọn, nhiều tác động trên cùng công tắc và lời giải các màn đầu. Đã kiểm tra riêng BFS tìm được lời giải và phát lại hợp lệ cho toàn bộ 33 màn.
+Kiểm thử web chạy cả bốn solver trên các nhóm testcase, phát lại kết quả bằng engine, đối chiếu chi phí UCS/A*, timeout, màn vô nghiệm, API chơi thắng/thua, phiên độc lập, input sai và chặn POST từ origin khác. Danh sách chọn màn được đối chiếu với đủ 43 testcase và từ chối các ID màn cũ.
 
 Three.js được lưu trong `web/vendor/`, kèm giấy phép MIT. Tham khảo API chính thức: [WebGLRenderer](https://threejs.org/docs/pages/WebGLRenderer.html), [OrthographicCamera](https://threejs.org/docs/pages/OrthographicCamera.html). GUI desktop Tkinter đã được thay thế bằng web 3D.

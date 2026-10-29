@@ -2,7 +2,7 @@
 from collections import deque  
 from time import perf_counter  
 
-from .common import edge_cost, finish  
+from .common import edge_cost, finish, search_successors
 
 def search(engine, start, deadline):
     queue = deque([start]) 
@@ -20,7 +20,7 @@ def search(engine, start, deadline):
             return finish(current, parents, costs, expanded, "solved")
 
         expanded += 1  
-        for action, next_state in engine.successors(current): 
+        for action, next_state in search_successors(engine, current):
             if next_state in parents:  
                 continue  
 

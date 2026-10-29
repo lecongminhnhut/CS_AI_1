@@ -102,7 +102,7 @@ def _worker(payload: dict[str, Any], output: Any, ready: Any) -> None:
             if not isinstance(actions, list):
                 valid, length, cost = False, None, None
             else:
-                state, valid, cost = start, True, 0
+                state, valid, cost, length = start, True, 0, 0
                 for action in actions:
                     try:
                         next_state, _info = engine.transition(state, action)
@@ -112,12 +112,14 @@ def _worker(payload: dict[str, Any], output: Any, ready: Any) -> None:
                     if next_state is None:
                         valid = False
                         break
-                    cost += edge_cost(engine, next_state)
+                    if action != "switch":
+                        length += 1
+                        cost += edge_cost(engine, next_state)
                     state = next_state
                 valid = valid and engine.is_goal(state)
-                length = len(actions)
+            valid = valid and length == row["solution_length"] and cost == row["total_cost"]
             row["valid_solution"] = valid
-            if not valid or length != row["solution_length"] or cost != row["total_cost"]:
+            if not valid:
                 row["status"] = "invalid_solution"
                 row["error"] = "Lời giải không hợp lệ hoặc length/cost không khớp khi phát lại"
         output.put(row)

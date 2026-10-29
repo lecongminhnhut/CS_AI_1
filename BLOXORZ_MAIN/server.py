@@ -12,30 +12,26 @@ from urllib.parse import urlsplit
 
 from bloxorz import Action, Board, Engine
 from bloxorz.solver import solve
-from bloxorz.levels import load_levels
 
 ROOT = Path(__file__).resolve().parent
-PACK = load_levels(ROOT / "levels/levels.json")
-LEVELS = {f"stage-{i:02}": (level.name, f"Coolmath · {level.name}" +
-                          (f" · Mã màn {level.passcode}" if level.passcode else ""))
-          for i, level in enumerate(PACK, 1)}
-BOARDS = {f"stage-{i:02}": level.board for i, level in enumerate(PACK, 1)}
+LEVELS = {}
+BOARDS = {}
 TESTCASE_GROUPS = json.loads((ROOT / "levels/testcases.json").read_text(encoding="utf-8"))["groups"]
 TESTCASE_IDS = set()
 for group in TESTCASE_GROUPS:
     for case in group["cases"]:
         key = case["id"]
-        if not isinstance(key, str) or key in LEVELS:
+        if not isinstance(key, str) or not key or key in LEVELS:
             raise ValueError("Duplicate or invalid testcase ID")
         BOARDS[key] = Board.from_dict(case["board"])
-        LEVELS[key] = (f"Test · {case['name']}", group["description"])
+        LEVELS[key] = (f"{key} · {case['name']}", group["description"])
         TESTCASE_IDS.add(key)
 
 
 class Session:
     def __init__(self):
         self.lock = Lock()
-        self.reset("stage-01")
+        self.reset(next(iter(LEVELS)))
 
     def reset(self, level):
         if level not in LEVELS:
@@ -65,7 +61,8 @@ class Session:
             self.message = "Đứng trên công tắc tách để tạo hai khối con."
             return
         result, self.transition = self.engine.transition(self.state, action)
-        self.moves += 1
+        if action != Action.SWITCH:
+            self.moves += 1
         if result is None:
             self.status = "lost"
             self.message = ("Ô mềm đã sập, khối mất điểm tựa và rơi. Chơi lại để chọn đường khác."

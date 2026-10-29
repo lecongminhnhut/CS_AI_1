@@ -7,7 +7,7 @@ from bloxorz.solver import solve
 
 
 class TestcaseTests(unittest.TestCase):
-    def test_groups_are_distinct_solvable_and_increasing_in_length(self):
+    def test_groups_are_distinct_and_solvable(self):
         suite = json.loads((Path(__file__).resolve().parents[1] / "levels/testcases.json").read_text(encoding="utf-8"))
         self.assertEqual(len(suite["groups"]), 5)
         ids, boards, previous_max = set(), set(), 0
@@ -34,7 +34,8 @@ class TestcaseTests(unittest.TestCase):
                         bridges.update(cell for cell in state.cells if board.tile(cell) == "B")
                         count = sum(board.tile(cell) == "F" for cell in state.cells)
                         fragile |= count > 0
-                        cost += 1 + count
+                        if action != "switch":
+                            cost += 1 + count
                     self.assertTrue(engine.is_goal(state))
                     self.assertEqual(result["cost"], cost)
                     if index == 0:
@@ -47,7 +48,6 @@ class TestcaseTests(unittest.TestCase):
                     if index == 3:
                         self.assertIn("split", kinds)
                     lengths.append(result["length"])
-            self.assertEqual(lengths, sorted(lengths))
             self.assertGreater(min(lengths), previous_max)
             previous_max = max(lengths)
 

@@ -36,7 +36,7 @@ class EngineTests(unittest.TestCase):
                 self.assertEqual(self.engine.step(result, inverse[action]), original)
 
     def test_win_and_terminal_state(self):
-        engine = Engine(Board.load(ROOT / "levels/basic.json"))
+        engine = Engine(Board(("S..G",), (0, 0), (0, 3)))
         first = engine.step(engine.initial_state(), "right")
         self.assertFalse(engine.is_goal(first))
         won = engine.step(first, "right")
@@ -133,7 +133,6 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(engine.step(State(((0, 1), (0, 2))), "right").bridges, frozenset({"g"}))
 
     def test_level_validation_and_sample_loading(self):
-        Board.load(ROOT / "levels/advanced.json")
         invalid = [
             {"rows": ["S.G", "."]}, {"rows": ["S?G"]}, {"rows": ["SSG"]},
             {"rows": ["SBG"]}, {"rows": ["SoG"]},
@@ -157,6 +156,10 @@ class EngineTests(unittest.TestCase):
         ]
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "level.json"
+            suite = json.loads((ROOT / "levels/testcases.json").read_text(encoding="utf-8"))
+            sample = suite["groups"][3]["cases"][0]["board"]
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            self.assertEqual(Board.load(path), Board.from_dict(sample))
             for data in invalid:
                 with self.subTest(data=data):
                     path.write_text(json.dumps(data), encoding="utf-8")

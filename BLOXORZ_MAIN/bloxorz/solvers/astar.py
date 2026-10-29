@@ -3,7 +3,7 @@ from itertools import count
 from math import inf
 from time import perf_counter
 
-from .common import edge_cost, finish
+from .common import edge_cost, finish, search_successors
 
 
 class PreparationTimeout(Exception):
@@ -129,7 +129,7 @@ def search(engine, start, deadline):
             return result(current, expanded, "solved")
         # 4. Sinh các nước đi hợp lệ bằng luật của engine.
         expanded += 1
-        for action, next_state in engine.successors(current):
+        for action, next_state in search_successors(engine, current):
             if perf_counter() >= deadline:
                 return result(None, expanded, "timeout")
             new_cost = cost + edge_cost(engine, next_state)
