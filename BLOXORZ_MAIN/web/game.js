@@ -3,7 +3,6 @@ import { buildTiles, buildScenery, buildGoalFlag, buildFireworks, blockGeometry,
 import { fallPlan, createFallMotion } from './motion.js';
 import { nextLevel, adjacentLevel } from './progression.js?v=skeleton02';
 import { renderTileLegend } from './legend.js?v=wild-grass2';
-import { initTestcases } from './testcases.js';
 import { countRolls, replayNextRoll } from './replay.js';
 
 const $ = selector => document.querySelector(selector);
@@ -49,7 +48,6 @@ scene.add(scenery, stage, pieces, celebration);
 const tileObjects = new Map();
 let sceneryLevel;
 let game, busy = false, replaying = false, path = null, animation = null;
-let testcasePanel;
 let stopRequested = false;
 let replayIndex = 0;
 let victoryEffects = null;
@@ -138,7 +136,6 @@ function buildPieces(state = game.state, status = game.status) {
 }
 
 function updateUI() {
-  testcasePanel?.setBusy(busy || replaying);
   $('#moves').textContent = String(game.moves);
   const bridgeTotal = new Set(game.bridge_cells.map(([, group]) => group)).size;
   $('#bridge-count').textContent = bridgeTotal ? `${game.state.bridges.length} / ${bridgeTotal}` : '—';
@@ -567,6 +564,4 @@ $('#level').value = game.level;
 buildBoard();
 buildPieces();
 resize();
-updateUI();
-testcasePanel = await initTestcases(api, running => { busy = running; updateUI(); }, level => reset(level));
 updateUI();
